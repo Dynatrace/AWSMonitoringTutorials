@@ -2,10 +2,11 @@
 
 In this tutorial we have different labs where we learn different use cases on how to monitor applications and services on AWS with Dynatrace SaaS. 
 
-1. [Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dyntrace-aws-monitoring-integration)
-2. [Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
-3. [Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
-4. [AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-4-aws-lambda-zombie-workshop)
+1. [Lab 1: Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dyntrace-aws-monitoring-integration)
+2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
+3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
+4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
+4. [Lab 5: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-5-aws-lambda-zombie-workshop)
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
@@ -72,7 +73,12 @@ Useful Links
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 
 
-# Lab 4 AWS Lambda Zombie Workshop
+# Lab 4 Monitor LAMP Stack configured through CloudFormation
+This lab will teach us how to use a pre-configured CloudFormation stack to configure a classical LAMP stack. We will inject the Dynatrace OneAgent into the User Data portion of the EC2 instance launch by changing the CloudFormation template. This will allow us to create multipl stacks of the same LAMP stack including Dynatrace OneAgent monitoring
+
+Useful Links:
+
+# Lab 5 AWS Lambda Zombie Workshop
 This lab from Amazon promotes Servless technology. It is often used on AWS Servless Meetups and Hackathons.
 Please follow the instructions on the [AWS Lambda Zombie Workshop GitHub Repo](https://github.com/awslabs/aws-lambda-zombie-workshop). 
 For the Dynatrace lab we do not need to go through the full excercise. Just the initial deployment of the app and inintial configuration steps are sufficient to get the app up& running.
