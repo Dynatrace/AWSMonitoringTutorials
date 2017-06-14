@@ -9,7 +9,9 @@ In this tutorial we have different labs where we learn different use cases on ho
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
+-- Make sure you have your AWS Account ID ready as we will need it
 2. You need a Dynatrace SaaS Account. Get your [Free Trial here!](http://bit.ly/dtsaastrial)
+-- Make sure you have your Dynatrace Tenant ID and Token ready as we will need it
 
 ## Preparation
 **Amazon**
@@ -27,8 +29,11 @@ This lab will teach us how to setup the Dynatrace AWS Monitoring Integration.
 The goal is to see the AWS Monitoring Dashboard populuated with data pulled from both Cloud Watch as well as from installed OneAgents
 ![](./images/lab1_awsdashboard.png)
 
-Useful Links
-* [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/)
+**Step-by-Step Guide**
+1. Open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). 
+2. Follow the instructions for either Role or Key-based authentication
+2.1. Role-based: 
+3. Once done Validate that Dynatrace shows data in the AWS Dashboard
 
 # Lab 2 Install OneAgent On EC2 Instance
 This lab will teach us how to install a Dynatrace OneAgent on a Linux EC2 Instance. 
