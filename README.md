@@ -16,7 +16,7 @@ This lab will teach us how to setup the Dynatrace AWS Monitoring Integration.
 The goal is to see the AWS Monitoring Dashboard populuated with data pulled from both Cloud Watch as well as from installed OneAgents
 ![](./images/lab1_awsdashboard.png)
 
-# Lab-2-Install-OneAgent-On-EC2-Instance
+# Lab 2 Install OneAgent On EC2 Instance
 This lab will teach us how to install a Dynatrace OneAgent on a Linux EC2 Instance. 
 The goal is that the EC2 host will show up in Dynatrace and is fully monitored through a OneAgent
 ![](./images/lab2_ec2hostmonitor.png)
