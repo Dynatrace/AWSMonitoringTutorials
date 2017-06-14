@@ -12,6 +12,11 @@ In this tutorial we have different labs where we learn different use cases on ho
 2. You need a Dynatrace SaaS Account. Get your [Free Trial here!](http://bit.ly/dtsaastrial)
 
 ## Preparation
+**Amazon**
+1. To remote into EC2 Instances we will need a Key Pair. Create one in preparation or once you walk through the lab
+2. To learn more about Key Pairs and how to connect to EC2 Instances read [Connect to your Linux Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html) 
+
+**Dynatrace Tenant Data**
 1. In your Dynatrace SaaS Portal navigate to Deploy Dynatrace -> Start Installation -> Linux 
 2. Copy the OneAgent Download and Installation command line (circled in red) as we will need it throughout the labs
 3. Also make a note of your TenantID and Token (two green marks) as we will also need it later
@@ -21,21 +26,6 @@ In this tutorial we have different labs where we learn different use cases on ho
 This lab will teach us how to setup the Dynatrace AWS Monitoring Integration. 
 The goal is to see the AWS Monitoring Dashboard populuated with data pulled from both Cloud Watch as well as from installed OneAgents
 ![](./images/lab1_awsdashboard.png)
-
-Step-by-Step Guide
-1. Logon to AWS and navigate to EC2. [This link](https://us-east-2.console.aws.amazon.com/ec2/v2/home) should also get you there!
-2. Now select the option to **Launch a new Instance**
-3. Select **Amazon Linux AMI** and then select the free tier eligible **t2.micro** instance type. Select Next
-4. **Configure Instance:** Expand the Advanced section and specify the following User Data script (make sure you use your unique OneAgent Download URI) 
-```
-#!/bin/bash
-wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/installer/oneagent/unix/latest/YOURTOKEN
-/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
-```
-
-4. Click through the configuration steps and learn which options are available 
-5. Add Tags: on this configuration screen we add a custom tag. Key=EC2InstanceType; Value=LabExcercise
-
 
 Useful Links
 * [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/)
@@ -47,6 +37,24 @@ The goal is that the EC2 host will show up in Dynatrace and is fully monitored t
 
 There are multiple ways to install a Dynatrace OneAgent on a "bare" EC2 Instance. If configuration management tools such as Puppet, Chef, Ansible or AWS CodeDeploy are used then Dynatrace OneAgent deployment can be done through these tools.
 Another very convenient approach for EC2 is to specify startup scripts that automatically get executed whenever Amazon launches an EC2 instances. In EC2 this is called "User Data".
+
+Step-by-Step Guide
+1. Logon to AWS and navigate to EC2. [This link](https://us-east-2.console.aws.amazon.com/ec2/v2/home) should also get you there!
+2. Now select the option to **Launch a new Instance**
+3. Select **Amazon Linux AMI** and then select the free tier eligible **t2.micro** instance type. Select Next
+4. **Configure Instance:** Expand the Advanced section and specify the following User Data script (make sure you use your unique OneAgent Download URI) 
+```
+#!/bin/bash
+wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/installer/oneagent/unix/latest/YOURTOKEN
+/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
+```
+5. Click next and make yourself familiar with Storage options. We keep the defaults 
+6. **Add Tags:** on this configuration screen we add a custom tag. Key=EC2InstanceType; Value=LabExcercise. 
+7. Click through the rest of the steps. Review settings and click Launch
+8. Select or create a new key pair. We will need this for remoting into EC2
+9. You can observe the launch log
+10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
+11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
 
 Useful Links
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
