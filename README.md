@@ -2,8 +2,8 @@
 
 In this tutorial we have different labs where we learn different use cases on how to monitor applications and services on AWS with Dynatrace SaaS. 
 
-1. [Setting up AWS Monitoring through Cloud Watch Integration](#setup-dyntrace-aws-monitoring-integration)
-2. [Monitoring EC2 Instances with Dynatrace OneAgent](#install-oneagent-on-ec2-instance)
+1. [Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dyntrace-aws-monitoring-integration)
+2. [Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
 3. [Monitoring Node.JS deployed through AWS Beanstalk](#monitor-nodejs-beanstalk-application)
 4. [AWS Lambda Zombie Workshop with Manual RUM Injection](#aws-lambda-zombie-workshop)
 
@@ -11,13 +11,12 @@ In this tutorial we have different labs where we learn different use cases on ho
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
 2. You need a Dynatrace SaaS Account. Get your [Free Trial here!](http://bit.ly/dtsaastrial)
 
-# Setup-Dynatrace-AWS-Monitoring-Integration
+# Lab-1-Setup-Dynatrace-AWS-Monitoring-Integration
 This lab will teach us how to setup the Dynatrace AWS Monitoring Integration. 
 The goal is to see the AWS Monitoring Dashboard populuated with data pulled from both Cloud Watch as well as from installed OneAgents
 ![](./images/lab1_awsdashboard.png)
 
-
-# Install-OneAgent-On-EC2-Instance
+# Lab-2-Install-OneAgent-On-EC2-Instance
 This lab will teach us how to install a Dynatrace OneAgent on a Linux EC2 Instance. 
 The goal is that the EC2 host will show up in Dynatrace and is fully monitored through a OneAgent
 ![](./images/lab2_ec2hostmonitor.png)
