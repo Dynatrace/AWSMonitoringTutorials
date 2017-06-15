@@ -90,7 +90,7 @@ Prerequisit
 1. Logon to AWS and Navigate to Elastic Beanstalk. [This link](https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home) should also get you there
 2. **Create a new application**
 3. Give it a name. Select **Node.js** as the platform and **upload your zip** file. Then click on **Configure more options**
-![](.(images/lab3_createnodeapp.png)
+![](./images/lab3_createnodeapp.png)
 4. Click on Software Options and add RUXIT_TENANT and RUXIT_TOKEN with your tenant and token. Click on Save
 ![](./images/lab3_softwareenv.png)
 5. Now its time to launch the environment
@@ -112,7 +112,7 @@ Dynatrace automatically detects process groups and by default does a pretty good
 6. Apply changes and validate that Dynatrace detects both instances
 
 Here is what you should see if you go to Smartscape. Dynatrace shows the logical Node.js service. The name BeanStalkService_v1 is actually taken from our previously defined custom process group detection. We also see that this service runs on 2 Node.js instances on two different EC2 hosts in two Availability Zones:
-![](./images/lab4_beanstalkloadbalanced.png)
+![](./images/lab3_beanstalkloadbalanced.png)
 
 
 
