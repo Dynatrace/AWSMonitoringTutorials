@@ -42,7 +42,7 @@ The goal is that the EC2 host will show up in Dynatrace and is fully monitored t
 There are multiple ways to install a Dynatrace OneAgent on a "bare" EC2 Instance. If configuration management tools such as Puppet, Chef, Ansible or AWS CodeDeploy are used then Dynatrace OneAgent deployment can be done through these tools.
 Another very convenient approach for EC2 is to specify startup scripts that automatically get executed whenever Amazon launches an EC2 instances. In EC2 this is called "User Data".
 
-Step-by-Step Guide
+**Step-by-Step Guide**
 1. Logon to AWS and navigate to EC2. [This link](https://us-east-2.console.aws.amazon.com/ec2/v2/home) should also get you there!
 2. Now select the option to **Launch a new Instance**
 3. Select **Amazon Linux AMI** and then select the free tier eligible **t2.micro** instance type. Select Next
@@ -76,8 +76,9 @@ Beanstalk allows you to simply upload your application code as a zip or war file
 3. Sets Environment Variables and executes startup scripts to prepare the environment#
 4. Launches the runtime environment (Node.js, PHP, Java, .NET ...)
 
-One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to leverage the "Elastic Beanstalk Extensions" concept. Beanstalk allows you to put additonal configuraton and script instructions into a subfolder called .ebextensions. Files with the ending .config will then be analyzed and executed during the startup phase of an instance. In our example you will find the following files in the .ebextension directory
-* dynatrace.config: Defines two Environment Variables (RUXIT_TENANT, RUXIT_TOKEN). It also downloads an special beanstalk installation script that will then be executed by Beanstalk as part of the launch process. This script references these two environment variables
+*Installing OneAgent on Beanstalk*
+One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to leverage the "Elastic Beanstalk Extensions" concept. Beanstalk allows you to put additonal configuraton and script instructions into a subfolder called .ebextensions. Files with the ending .config will then be analyzed and executed during the startup phase of an instance. In our example you will find the following files in the .ebextension directory:
+* dynatrace.config: Defines two Environment Variables (RUXIT_TENANT, RUXIT_TOKEN). It also downloads an special beanstalk installation script (still branded ruxit.com) into a special directory that will be executed by Beanstalk as part of the instance launch process. This script references these two environment variables. The environment variables could be set with default values in the .config file or can later be defined as part of the Beanstalk Configuration when launching an instance. We will do the latter.
 * version.config: This config files specifies additional environment variables that are set to the EC2 instance. It can be used to demonstrate custom process group tagging with Dynatrace
 
 Prerequisit
@@ -85,13 +86,35 @@ Prerequisit
 2. Explore the .ebextensions directory as explained above
 3. Create a ZIP file of the full NodeJSBeanStalkSample including .ebextension directory
 
-Step-by-Step-Guide:
+**Step-by-Step-Guide**
 1. Logon to AWS and Navigate to Elastic Beanstalk. [This link](https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home) should also get you there
 2. **Create a new application**
 3. Give it a name. Select **Node.js** as the platform and **upload your zip** file. Then click on **Configure more options**
 ![](.(images/lab3_createnodeapp.png)
 4. Click on Software Options and add RUXIT_TENANT and RUXIT_TOKEN with your tenant and token. Click on Save
+![](./images/lab3_softwareenv.png)
 5. Now its time to launch the environment
+6. Once the environment is up and running we can access the website. It is a very simply one page website that is delivered by Node.js. Dynatrace OneAgent will automatically inject the JavaScript Tag for Real User Monitoring. You can verify that.
+![](./images/lab3_beanstalkec2instance.png)
+
+**Additional Step: Process Group Identification**
+Dynatrace automatically detects process groups and by default does a pretty good job in detecting the logical application deployed by looking at different environment variables or application server configuration files. If you want to override that process you can configure a custom Process Group Detection Rule. In our version.config file we specify a custom environment variable called MYVERSION. In this additional step we simply configure dynatrace to detect the Process Group Name based on that value in case this environment variable is set.
+1. In Dynatrace go to Settings -> Monitoring -> Process group detection
+2. Add a new rule for Node.js and specify MYVERSION as the environment variable to look at
+3. Next time you launch your application you will see Dynatrace will capture that value of our MYVERSION Environment Variable
+
+**Additional Step: Load Balancing**
+1. Go to your Beanstalk Environment in AWS Console
+2. Click on Configuration - Scaling
+3. Change the environment type to "Load balancing, auto scale"
+4. Apply the changes and let Beanstalk restart
+5. Go back to the same settings after restart and change auto scale to minimum instances of 2
+6. Apply changes and validate that Dynatrace detects both instances
+
+Here is what you should see if you go to Smartscape. Dynatrace shows the logical Node.js service. The name BeanStalkService_v1 is actually taken from our previously defined custom process group detection. We also see that this service runs on 2 Node.js instances on two different EC2 hosts in two Availability Zones:
+![](./images/lab4_beanstalkloadbalanced.png)
+
+
 
 
 Useful Links
