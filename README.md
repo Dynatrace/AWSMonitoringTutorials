@@ -122,6 +122,55 @@ Useful Links
 # Lab 4 Monitor LAMP Stack configured through CloudFormation
 This lab will teach us how to use a pre-configured CloudFormation stack to configure a classical LAMP stack. We will inject the Dynatrace OneAgent into the User Data portion of the EC2 instance launch by changing the CloudFormation template. This will allow us to create multipl stacks of the same LAMP stack including Dynatrace OneAgent monitoring
 
+**Step-by-Step-Guide**
+1. Logon to AWS and navigate to the [CloudFormation Service](https://us-east-2.console.aws.amazon.com/cloudformation/home)
+2. **Create a new Stack**: Select LAMP Stack and then click on *View/Edit template*
+![](./images/lab4_createlampstack.png)
+3. We are going to add two new parameters: DYNATRACE_TENANT and DYNATRACE_TOKEN which users can later provide. Simply add the following code snipped to the parameters in the JSON Editor
+```
+    "DynatraceTenant": {
+        "Description": "Dynatrace SaaS Tenant",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "64",
+        "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+        "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    },        
+    "DynatraceToken": {
+        "Description": "Dynatrace SaaS Token",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "64",
+        "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+        "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    }, 
+```
+4. Now we are going to add a similar User Data startup script as we did when instrumenting a regular EC2 Instance launch. Scroll down to the "UserData" Property Definition. Right after the line "yum update -y aws-cfn-bootstrap\n" we will add the following code.:
+```
+            "# Install Dynatrace OneAgent\n",
+            "cd /home/ec2-user\n",
+            "wget -O Dynatrace-OneAgent-Linux.sh https://",
+            {
+                "Ref": "DynatraceTenant"
+            },
+            ".live.dynatrace.com/installer/oneagent/unix/latest/",
+            {
+                "Ref": "DynatraceToken"                                    
+            },
+            "\n",
+            "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
+```
+5. **Click on "Validate Template"** in the toolbar to make sure you have no typos.
+6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where DYNATRACE_TENANT and DYNATRACE_TOKEN are configurable.
+7. **Click on Create Stack** in the toolbar. This will get you back to the previous screen with your new template already uploaded to S3
+8. **Click on Next**
+9. Now we have to fill out all the parameters - including our Dynatrace Tenant and Dynatrace Token. Please choose a good name for the stack and provide the passwords for the database properties. When done **Click Next**
+![](./images/lab4_configurestack.png)
+10. **Options**: Here you could define additonal tags that would automatically be picked up by Dynatrace OneAgent. Feel free to define a tag and explore that option. Once done **Click Next**
+11. **Review**: Review your settings - then **Click Create**
+12. You will end up in the Stack List. TIP: if your Stack doesnt show up click the Refresh button! It will take a while until everything is fully created!
+
+
 Useful Links:
 
 # Lab 5 AWS Lambda Zombie Workshop
