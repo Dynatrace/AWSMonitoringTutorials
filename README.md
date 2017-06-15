@@ -1,6 +1,6 @@
 # AWSMonitoringTutorials
 
-In this tutorial we have different labs where we learn different use cases on how to monitor applications and services on AWS with Dynatrace SaaS. 
+In this tutorial we have different labs where we learn different use cases on how to monitor applications and services on AWS with Dynatrace SaaS. The same will also work if you have Dynatrace Managed installed On-Premise. Also remember: Dynatrace can not only monitor your AWS Environments but all your Apps deployed on premise, Azure, OpenStack, OpenShift, VMWare or anywhere else!
 
 1. [Lab 1: Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dyntrace-aws-monitoring-integration)
 2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
@@ -10,7 +10,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
-2. You need a Dynatrace SaaS Account. Get your [Free Trial here!](http://bit.ly/dtsaastrial)
+2. You need a Dynatrace Account. Get your [Free SaaS Trial here!](http://bit.ly/dtsaastrial)
 
 ## Preparation
 **Amazon**
@@ -114,11 +114,9 @@ Dynatrace automatically detects process groups and by default does a pretty good
 Here is what you should see if you go to Smartscape. Dynatrace shows the logical Node.js service. The name BeanStalkService_v1 is actually taken from our previously defined custom process group detection. We also see that this service runs on 2 Node.js instances on two different EC2 hosts in two Availability Zones:
 ![](./images/lab3_beanstalkloadbalanced.png)
 
-
-
-
 Useful Links
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
+* [Dynatrace Blog:Set up custom process group monitoring](https://www.dynatrace.com/blog/set-custom-process-groups-monitoring/)
 
 
 # Lab 4 Monitor LAMP Stack configured through CloudFormation
