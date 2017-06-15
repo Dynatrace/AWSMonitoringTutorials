@@ -169,9 +169,14 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 10. **Options**: Here you could define additonal tags that would automatically be picked up by Dynatrace OneAgent. Feel free to define a tag and explore that option. Once done **Click Next**
 11. **Review**: Review your settings - then **Click Create**
 12. You will end up in the Stack List. TIP: if your Stack doesnt show up click the Refresh button! It will take a while until everything is fully created!
-
+13. Once the environment is in status *CREATE_COMPLETE* select the entry and find the URL to your enviornment in the Output tab in the bottom. Open that URL. You will see that PHP returns its standard page.
+14. **Dynatrace**: Now move over to Dynatrace and explore the data collected. If you click on Technology you should see Apache and MySQL show up. Click on Apache, expand the bottom list of process groups and click on Proces Group Details. From there you can navigate further to the actual process group and explore more about the data captured:
+![](./images/lab4_apacheprocessgroup.png)
+Navigating to the Smartscape actually shows you how Dynatrace OneAgent really automatically detects every single process on that EC2 Linux instance including MySql and some other native processes
+![](./images/lab4_lampsmartscape.png)
 
 Useful Links:
+* [AWS CloudFormation documentation](https://aws.amazon.com/documentation/cloudformation/)
 
 # Lab 5 AWS Lambda Zombie Workshop
 This lab from Amazon promotes Servless technology. It is often used on AWS Servless Meetups and Hackathons.
