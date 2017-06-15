@@ -69,6 +69,31 @@ This lab will teach us how to install a Dynatrace OneAgent into a Node.js applic
 As a base we use the sample node.js application that AWS uses in their tutorials. For more information see ...
 The goal of this lab is to have full Node.js and End User monitoring enabled with Dynatrace.
 
+**Background Information on Beanstalk**
+Beanstalk allows you to simply upload your application code as a zip or war file to AWS. AWS Beanstalk then 
+1. Launches a new EC2 instance for you with the required runtime (Node.js, PHP, Java, .NET ...)
+2. Extracts your ZIP/WAR file onto that machine
+3. Sets Environment Variables and executes startup scripts to prepare the environment#
+4. Launches the runtime environment (Node.js, PHP, Java, .NET ...)
+
+One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to leverage the "Elastic Beanstalk Extensions" concept. Beanstalk allows you to put additonal configuraton and script instructions into a subfolder called .ebextensions. Files with the ending .config will then be analyzed and executed during the startup phase of an instance. In our example you will find the following files in the .ebextension directory
+* dynatrace.config: Defines two Environment Variables (RUXIT_TENANT, RUXIT_TOKEN). It also downloads an special beanstalk installation script that will then be executed by Beanstalk as part of the launch process. This script references these two environment variables
+* version.config: This config files specifies additional environment variables that are set to the EC2 instance. It can be used to demonstrate custom process group tagging with Dynatrace
+
+Prerequisit
+1. Download the NodeJSBeanStalkSample from this GitHub Repo
+2. Explore the .ebextensions directory as explained above
+3. Create a ZIP file of the full NodeJSBeanStalkSample including .ebextension directory
+
+Step-by-Step-Guide:
+1. Logon to AWS and Navigate to Elastic Beanstalk. [This link](https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home) should also get you there
+2. **Create a new application**
+3. Give it a name. Select **Node.js** as the platform and **upload your zip** file. Then click on **Configure more options**
+![](.(images/lab3_createnodeapp.png)
+4. Click on Software Options and add RUXIT_TENANT and RUXIT_TOKEN with your tenant and token. Click on Save
+5. Now its time to launch the environment
+
+
 Useful Links
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 
