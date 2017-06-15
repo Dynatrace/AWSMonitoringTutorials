@@ -92,7 +92,7 @@ Prerequisit
 3. Give it a name. Select **Node.js** as the platform and **upload your zip** file. Then click on **Configure more options**
 ![](./images/lab3_createnodeapp.png)
 4. Click on Software Options and add RUXIT_TENANT and RUXIT_TOKEN with your tenant and token. Click on Save
-![](./images/lab3_softwareenv.png)
+![](./images/lab3_softwareenv.PNG)
 5. Now its time to launch the environment
 6. Once the environment is up and running we can access the website. It is a very simply one page website that is delivered by Node.js. Dynatrace OneAgent will automatically inject the JavaScript Tag for Real User Monitoring. You can verify that.
 ![](./images/lab3_beanstalkec2instance.png)
