@@ -1,4 +1,4 @@
-# AWSMonitoringTutorials
+# AWS Monitoring Tutorials for Dynatrace SaaS/Managed
 
 In this tutorial we have different labs where we learn different use cases on how to monitor applications and services on AWS with Dynatrace SaaS. The same will also work if you have Dynatrace Managed installed On-Premise. Also remember: Dynatrace can not only monitor your AWS Environments but all your Apps deployed on premise, Azure, OpenStack, OpenShift, VMWare or anywhere else!
 
