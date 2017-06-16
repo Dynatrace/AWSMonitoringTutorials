@@ -62,12 +62,15 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/instal
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
 
-Troubleshooting:
+Troubleshooting
+
 If something doesnt go as expected what to do? Well - Amazon provides a good way to access these EC2 instances
 1. Navigate to your [EC2 Manager Console](https://us-east-2.console.aws.amazon.com/ec2/v2/home)
 2. Select the EC2 instance in question
 3. Explore the options such as **Connect** and follow the instructions to remote into that machine. 
 4. Explore **Actions -> Instance Settings -> Get System Log** to get access to the system log and verify what happened during startup
+![](./images/lab1_ec2instancelist.PNG)
+
 
 Useful Links
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
