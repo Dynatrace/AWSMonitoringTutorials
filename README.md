@@ -24,15 +24,17 @@ In this tutorial we have different labs where we learn different use cases on ho
 ![](./images/labintro_dynatracedeploy.png)
 
 # Lab 1 Setup Dynatrace AWS Monitoring Integration
-This lab will teach us how to setup the Dynatrace AWS Monitoring Integration. 
-The goal is to see the AWS Monitoring Dashboard populuated with data pulled from both Cloud Watch as well as from installed OneAgents
+This lab will teach us how to setup the Dynatrace AWS Monitoring Integration with AWS CloudWatch. 
+The goal is to see the Dynatrace AWS Monitoring Dashboard populuated with data pulled from both [AWS CloudWatch](https://aws.amazon.com/cloudwatch/) as well as from installed OneAgents:
 ![](./images/lab1_awsdashboard.png)
 
 **Step-by-Step Guide**
 1. Open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). 
 2. Follow the instructions for either Role or Key-based authentication
 3. Tip for Role-based: Make sure you remember the Role Name, your AWS Account ID and the External ID while creating the role. You will need it at the very last step of the configuration
-4. Once done Validate that Dynatrace shows data in the AWS Dashboard
+4. Once done Validate that Dynatrace shows data in the AWS Dashboard. Simply click on "AWS" in the Dynatrace menu and you should see a simliar screen as shown above
+
+**Costs:** AWS charges for CloudWatch API access when exceeding 1 million requests. More details can be found in the Dynatrace and CloudWatch Documentation
 
 # Lab 2 Install OneAgent On EC2 Instance
 This lab will teach us how to install a Dynatrace OneAgent on a Linux EC2 Instance. 
@@ -59,6 +61,13 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/instal
 9. You can observe the launch log
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
+
+Troubleshooting:
+If something doesnt go as expected what to do? Well - Amazon provides a good way to access these EC2 instances
+1. Navigate to your [EC2 Manager Console](https://us-east-2.console.aws.amazon.com/ec2/v2/home)
+2. Select the EC2 instance in question
+3. Explore the options such as **Connect** and follow the instructions to remote into that machine. 
+4. Explore **Actions -> Instance Settings -> Get System Log** to get access to the system log and verify what happened during startup
 
 Useful Links
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
@@ -117,7 +126,6 @@ Here is what you should see if you go to Smartscape. Dynatrace shows the logical
 Useful Links
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 * [Dynatrace Blog:Set up custom process group monitoring](https://www.dynatrace.com/blog/set-custom-process-groups-monitoring/)
-
 
 # Lab 4 Monitor LAMP Stack configured through CloudFormation
 This lab will teach us how to use a pre-configured CloudFormation stack to configure a classical LAMP stack. We will inject the Dynatrace OneAgent into the User Data portion of the EC2 instance launch by changing the CloudFormation template. This will allow us to create multipl stacks of the same LAMP stack including Dynatrace OneAgent monitoring
