@@ -62,8 +62,7 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/instal
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
 
-Troubleshooting
-
+**Troubleshooting**
 If something doesnt go as expected what to do? Well - Amazon provides a good way to access these EC2 instances
 1. Navigate to your [EC2 Manager Console](https://us-east-2.console.aws.amazon.com/ec2/v2/home)
 2. Select the EC2 instance in question
@@ -71,8 +70,7 @@ If something doesnt go as expected what to do? Well - Amazon provides a good way
 4. Explore **Actions -> Instance Settings -> Get System Log** to get access to the system log and verify what happened during startup
 ![](./images/lab1_ec2instancelist.PNG)
 
-
-Useful Links
+**Useful Links**
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 * [Running commands on your Windows Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html#user-data-execution)
 
@@ -93,7 +91,7 @@ One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to 
 * dynatrace.config: Defines two Environment Variables (RUXIT_TENANT, RUXIT_TOKEN). It also downloads an special beanstalk installation script (still branded ruxit.com) into a special directory that will be executed by Beanstalk as part of the instance launch process. This script references these two environment variables. The environment variables could be set with default values in the .config file or can later be defined as part of the Beanstalk Configuration when launching an instance. We will do the latter.
 * version.config: This config files specifies additional environment variables that are set to the EC2 instance. It can be used to demonstrate custom process group tagging with Dynatrace
 
-Prerequisit
+**Prerequisit**
 1. Download the NodeJSBeanStalkSample from this GitHub Repo
 2. Explore the .ebextensions directory as explained above
 3. Create a ZIP file of the full NodeJSBeanStalkSample including .ebextension directory
@@ -126,7 +124,7 @@ Dynatrace automatically detects process groups and by default does a pretty good
 Here is what you should see if you go to Smartscape. Dynatrace shows the logical Node.js service. The name BeanStalkService_v1 is actually taken from our previously defined custom process group detection. We also see that this service runs on 2 Node.js instances on two different EC2 hosts in two Availability Zones:
 ![](./images/lab3_beanstalkloadbalanced.png)
 
-Useful Links
+**Useful Links**
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 * [Dynatrace Blog:Set up custom process group monitoring](https://www.dynatrace.com/blog/set-custom-process-groups-monitoring/)
 
@@ -186,7 +184,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 Navigating to the Smartscape actually shows you how Dynatrace OneAgent really automatically detects every single process on that EC2 Linux instance including MySql and some other native processes
 ![](./images/lab4_lampsmartscape.png)
 
-Useful Links:
+**Useful Links**
 * [AWS CloudFormation documentation](https://aws.amazon.com/documentation/cloudformation/)
 
 # Lab 5 AWS Lambda Zombie Workshop
