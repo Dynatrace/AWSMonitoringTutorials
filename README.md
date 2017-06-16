@@ -62,7 +62,7 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/instal
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
 
-**Troubleshooting**
+**Troubleshooting:**
 If something doesnt go as expected what to do? Well - Amazon provides a good way to access these EC2 instances
 1. Navigate to your [EC2 Manager Console](https://us-east-2.console.aws.amazon.com/ec2/v2/home)
 2. Select the EC2 instance in question
@@ -108,6 +108,7 @@ One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to 
 ![](./images/lab3_beanstalkec2instance.png)
 
 **Additional Step: Process Group Identification**
+
 Dynatrace automatically detects process groups and by default does a pretty good job in detecting the logical application deployed by looking at different environment variables or application server configuration files. If you want to override that process you can configure a custom Process Group Detection Rule. In our version.config file we specify a custom environment variable called MYVERSION. In this additional step we simply configure dynatrace to detect the Process Group Name based on that value in case this environment variable is set.
 1. In Dynatrace go to Settings -> Monitoring -> Process group detection
 2. Add a new rule for Node.js and specify MYVERSION as the environment variable to look at
