@@ -80,6 +80,7 @@ As a base we use the sample node.js application that AWS uses in their tutorials
 The goal of this lab is to have full Node.js and End User monitoring enabled with Dynatrace.
 
 **Background Information on Beanstalk**
+
 Beanstalk allows you to simply upload your application code as a zip or war file to AWS. AWS Beanstalk then 
 1. Launches a new EC2 instance for you with the required runtime (Node.js, PHP, Java, .NET ...)
 2. Extracts your ZIP/WAR file onto that machine
