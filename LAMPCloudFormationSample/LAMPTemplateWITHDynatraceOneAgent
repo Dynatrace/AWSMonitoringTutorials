@@ -845,8 +845,7 @@
                                 },
                                 ".live.dynatrace.com/installer/oneagent/unix/latest/",
                                 {
-                                    "Ref": "DynatraceToken"
-                                    
+                                    "Ref": "DynatraceToken"                                    
                                 },
                                 "\n",
                                 "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
