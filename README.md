@@ -200,4 +200,4 @@ Follow these steps to get this accomplished
 4. Edit the local index.html page and add the JavaScript snippet in the <head> of the html file
 5. Upload the modified index.html file
 From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
-![](./images/lab5_endusermonitoring)
+![](./images/lab5_endusermonitoring.png)
