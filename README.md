@@ -18,9 +18,8 @@ In this tutorial we have different labs where we learn different use cases on ho
 2. To learn more about Key Pairs and how to connect to EC2 Instances read [Connect to your Linux Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html) 
 
 **Dynatrace Tenant Data**
-1. In your Dynatrace SaaS Portal navigate to Deploy Dynatrace -> Start Installation -> Linux 
+1. In your Dynatrace SaaS or Managed Portal navigate to Deploy Dynatrace -> Start Installation -> Linux 
 2. Copy the OneAgent Download and Installation command line (circled in red) as we will need it throughout the labs
-3. Also make a note of your TenantID and Token (two green marks) as we will also need it later
 ![](./images/labintro_dynatracedeploy.png)
 
 # Lab 1 Setup Dynatrace AWS Monitoring Integration
@@ -32,6 +31,7 @@ The goal is to see the Dynatrace AWS Monitoring Dashboard populuated with data p
 1. Open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). 
 2. Follow the instructions for either Role or Key-based authentication
 3. Tip for Role-based: Make sure you remember the Role Name, your AWS Account ID and the External ID while creating the role. You will need it at the very last step of the configuration
+4. Tip for Key-based authentication: For quick evaluation I think this is the easiest path assuming your AWS User has the [required policies attached](http://assets.dynatrace.com/global/resources/aws-policy.json).
 4. Once done Validate that Dynatrace shows data in the AWS Dashboard. Simply click on "AWS" in the Dynatrace menu and you should see a simliar screen as shown above
 
 **Costs:** AWS charges for CloudWatch API access when exceeding 1 million requests. More details can be found in the Dynatrace and CloudWatch Documentation
@@ -51,7 +51,7 @@ Another very convenient approach for EC2 is to specify startup scripts that auto
 4. **Configure Instance:** Expand the Advanced section and specify the following User Data script (make sure you use your unique OneAgent Download URI) 
 ```
 #!/bin/bash
-wget -O Dynatrace-OneAgent-Linux.sh https://YOURTENANT.live.dynatrace.com/installer/oneagent/unix/latest/YOURTOKEN
+wget -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOADLINK
 /bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
 ```
 5. Click next and make yourself familiar with Storage options. We keep the defaults 
@@ -89,7 +89,7 @@ Beanstalk allows you to simply upload your application code as a zip or war file
 
 *Installing OneAgent on Beanstalk*
 One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to leverage the "Elastic Beanstalk Extensions" concept. Beanstalk allows you to put additonal configuraton and script instructions into a subfolder called .ebextensions. Files with the ending .config will then be analyzed and executed during the startup phase of an instance. In our example you will find the following files in the .ebextension directory:
-* dynatrace.config: Defines two Environment Variables (RUXIT_TENANT, RUXIT_TOKEN). It also downloads an special beanstalk installation script (still branded ruxit.com) into a special directory that will be executed by Beanstalk as part of the instance launch process. This script references these two environment variables. The environment variables could be set with default values in the .config file or can later be defined as part of the Beanstalk Configuration when launching an instance. We will do the latter.
+* dynatrace.config: Defines one Configuration Option (DYNATRACE_ONEAGENT_DOWNLOAD). It also comes with a special beanstalk installation script that gets put into a special directory which will be executed by Beanstalk as part of the instance launch process. This script references the DYNATRACE_ONEAGENT_DOWNLOAD option. You could either set the option value in the .config file before uploading it to AWS or you can set the value later when configuring the launch parameters. We will do THE LATTER.
 * version.config: This config files specifies additional environment variables that are set to the EC2 instance. It can be used to demonstrate custom process group tagging with Dynatrace
 
 **Prerequisit**
@@ -102,7 +102,7 @@ One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to 
 2. **Create a new application**
 3. Give it a name. Select **Node.js** as the platform and **upload your zip** file. Then click on **Configure more options**
 ![](./images/lab3_createnodeapp.png)
-4. Click on Software Options and add RUXIT_TENANT and RUXIT_TOKEN with your tenant and token. Click on Save
+4. Click on Software Options and add DYNATRACE_ONEAGENT_DOWNLOAD with the full download URL for your OneAgent. Click on Save
 ![](./images/lab3_softwareenv.PNG)
 5. Now its time to launch the environment
 6. Once the environment is up and running we can access the website. It is a very simply one page website that is delivered by Node.js. Dynatrace OneAgent will automatically inject the JavaScript Tag for Real User Monitoring. You can verify that.
@@ -139,40 +139,28 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 ![](./images/lab4_createlampstack.png)
 3. We are going to add two new parameters: DYNATRACE_TENANT and DYNATRACE_TOKEN which users can later provide. Simply add the following code snipped to the parameters in the JSON Editor
 ```
-    "DynatraceTenant": {
-        "Description": "Dynatrace SaaS Tenant",
+    "DynatraceOneAgentLink": {
+        "Description": "Dynatrace OneAgent Download",
         "Type": "String",
         "MinLength": "1",
-        "MaxLength": "64",
+        "MaxLength": "256",
         "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
-        "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
-    },        
-    "DynatraceToken": {
-        "Description": "Dynatrace SaaS Token",
-        "Type": "String",
-        "MinLength": "1",
-        "MaxLength": "64",
-        "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
-        "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
-    }, 
+        "ConstraintDescription": "Full Download Link to your Dynatrace OneAgent. Get this from your Settings -> Deploy screen in your Dynatrace SaaS/Managed console"
+    } 
 ```
 4. Now we are going to add a similar User Data startup script as we did when instrumenting a regular EC2 Instance launch. Scroll down to the "UserData" Property Definition. Right after the line "yum update -y aws-cfn-bootstrap\n" we will add the following code.:
 ```
             "# Install Dynatrace OneAgent\n",
             "cd /home/ec2-user\n",
-            "wget -O Dynatrace-OneAgent-Linux.sh https://",
+            "wget -O Dynatrace-OneAgent-Linux.sh ",
             {
-                "Ref": "DynatraceTenant"
-            },
-            ".live.dynatrace.com/installer/oneagent/unix/latest/",
-            {
-                "Ref": "DynatraceToken"                                    
+                "Ref": "DynatraceOneAgentLink"
             },
             "\n",
             "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
 ```
 5. **Click on "Validate Template"** in the toolbar to make sure you have no typos.
-6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where DYNATRACE_TENANT and DYNATRACE_TOKEN are configurable.
+6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where the actual download link is configurable through _DynatraceOneAgentLink_.
 7. **Click on Create Stack** in the toolbar. This will get you back to the previous screen with your new template already uploaded to S3
 8. **Click on Next**
 9. Now we have to fill out all the parameters - including our Dynatrace Tenant and Dynatrace Token. Please choose a good name for the stack and provide the passwords for the database properties. When done **Click Next**
