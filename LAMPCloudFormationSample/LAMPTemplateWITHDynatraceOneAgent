@@ -7,21 +7,11 @@
             "Type": "AWS::EC2::KeyPair::KeyName",
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
         },
-        "DynatraceTenant": {
-            "Description": "Dynatrace SaaS Tenant",
+        "DynatraceOneAgentLink": {
+            "Description": "Dynatrace OneAgent Download",
             "Type": "String",
-            "MinLength": "1",
-            "MaxLength": "64",
-            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
-            "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
-        },        
-        "DynatraceToken": {
-            "Description": "Dynatrace SaaS Token",
-            "Type": "String",
-            "MinLength": "1",
-            "MaxLength": "64",
-            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
-            "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+            "MaxLength": "256",
+            "ConstraintDescription": "Full Download Link to your Dynatrace OneAgent. Get this from your Settings -> Deploy screen in your Dynatrace SaaS/Managed console"
         },        
         "DBName": {
             "Default": "MyDatabase",
@@ -839,14 +829,12 @@
                                 "yum update -y aws-cfn-bootstrap\n",
                                 "# Install Dynatrace OneAgent\n",
                                 "cd /home/ec2-user\n",
-                                "wget -O Dynatrace-OneAgent-Linux.sh https://",
+                                "wget -O Dynatrace-OneAgent-Linux.sh ",
                                 {
-                                    "Ref": "DynatraceTenant"
+                                  "Ref": "DynatraceOneAgentLink"
                                 },
-                                ".live.dynatrace.com/installer/oneagent/unix/latest/",
-                                {
-                                    "Ref": "DynatraceToken"                                    
-                                },
+                                "\n",
+                                "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
                                 "\n",
                                 "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
                                 "# Install the files and packages from the metadata\n",
