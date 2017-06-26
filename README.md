@@ -57,7 +57,7 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOA
 5. Click next and make yourself familiar with Storage options. We keep the defaults 
 6. **Add Tags:** on this configuration screen we add a custom tag. Key=EC2InstanceType; Value=LabExcercise. 
 7. Click through the rest of the steps. Review settings and click Launch
-8. Select or create a new key pair. We will need this for remoting into EC2
+8. **Select or create** a new key pair. We will need this for remoting into EC2
 9. You can observe the launch log
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
