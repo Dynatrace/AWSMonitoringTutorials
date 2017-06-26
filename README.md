@@ -142,9 +142,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
     "DynatraceOneAgentLink": {
         "Description": "Dynatrace OneAgent Download",
         "Type": "String",
-        "MinLength": "1",
         "MaxLength": "256",
-        "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
         "ConstraintDescription": "Full Download Link to your Dynatrace OneAgent. Get this from your Settings -> Deploy screen in your Dynatrace SaaS/Managed console"
     } 
 ```
