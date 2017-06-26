@@ -157,7 +157,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
             "\n",
             "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
 ```
-5. **Click on "Validate Template"** in the toolbar to make sure you have no typos.
+5. **Click on "Validate Template"** in the toolbar to make sure you have no typos. **PROBLEMS??** If you dont waste too much time feel free to copy/paste the [complete template from here!](/LAMPCloudFormationSample/LAMPTemplateWITHDynatraceOneAgent)
 6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where the actual download link is configurable through _DynatraceOneAgentLink_.
 7. **Click on Create Stack** in the toolbar. This will get you back to the previous screen with your new template already uploaded to S3
 8. **Click on Next**
