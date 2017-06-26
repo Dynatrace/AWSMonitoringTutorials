@@ -17,7 +17,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 1. To remote into EC2 Instances we will need a Key Pair. Create one in preparation or once you walk through the lab
 2. To learn more about Key Pairs and how to connect to EC2 Instances read [Connect to your Linux Instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html) 
 
-**Dynatrace Tenant Data**
+**Dynatrace OneAgent Download Instructions**
 1. In your Dynatrace SaaS or Managed Portal navigate to Deploy Dynatrace -> Start Installation -> Linux 
 2. Copy the OneAgent Download and Installation command line (circled in red) as we will need it throughout the labs
 ![](./images/labintro_dynatracedeploy.png)
@@ -28,7 +28,7 @@ The goal is to see the Dynatrace AWS Monitoring Dashboard populuated with data p
 ![](./images/lab1_awsdashboard.png)
 
 **Step-by-Step Guide**
-1. Open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). 
+1. For Dynatrace SaaS please open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). For Dynatrace Managed check out [Dynatrace Doc: How do I monitor AWS using role-based access?](https://help.dynatrace.com/dynatrace-managed/dynatrace-server/how-do-i-monitor-aws-using-role-based-access/)
 2. Follow the instructions for either Role or Key-based authentication
 3. Tip for Role-based: Make sure you remember the Role Name, your AWS Account ID and the External ID while creating the role. You will need it at the very last step of the configuration
 4. Tip for Key-based authentication: For quick evaluation I think this is the easiest path assuming your AWS User has the [required policies attached](http://assets.dynatrace.com/global/resources/aws-policy.json).
@@ -57,7 +57,7 @@ wget -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOA
 5. Click next and make yourself familiar with Storage options. We keep the defaults 
 6. **Add Tags:** on this configuration screen we add a custom tag. Key=EC2InstanceType; Value=LabExcercise. 
 7. Click through the rest of the steps. Review settings and click Launch
-8. Select or create a new key pair. We will need this for remoting into EC2
+8. **Select or create** a new key pair. We will need this for remoting into EC2
 9. You can observe the launch log
 10. Navigate to the Dynatrace Hosts list and wait until the host shows up. Click on it and explore what is monitored
 11. Expand the list of Properties and Tags. We should also find our EC2InstanceType tag with the value LabExcercise
@@ -137,14 +137,12 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 1. Logon to AWS and navigate to the [CloudFormation Service](https://us-east-2.console.aws.amazon.com/cloudformation/home)
 2. **Create a new Stack**: Select LAMP Stack and then click on *View/Edit template*
 ![](./images/lab4_createlampstack.png)
-3. We are going to add two new parameters: DYNATRACE_TENANT and DYNATRACE_TOKEN which users can later provide. Simply add the following code snipped to the parameters in the JSON Editor
+3. We are going to add one new parameter: _DynatraceOneAgentLink_ which users can later provide. Simply add the following code snipped to the parameters in the JSON Editor
 ```
     "DynatraceOneAgentLink": {
         "Description": "Dynatrace OneAgent Download",
         "Type": "String",
-        "MinLength": "1",
         "MaxLength": "256",
-        "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
         "ConstraintDescription": "Full Download Link to your Dynatrace OneAgent. Get this from your Settings -> Deploy screen in your Dynatrace SaaS/Managed console"
     } 
 ```
@@ -163,7 +161,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where the actual download link is configurable through _DynatraceOneAgentLink_.
 7. **Click on Create Stack** in the toolbar. This will get you back to the previous screen with your new template already uploaded to S3
 8. **Click on Next**
-9. Now we have to fill out all the parameters - including our Dynatrace Tenant and Dynatrace Token. Please choose a good name for the stack and provide the passwords for the database properties. When done **Click Next**
+9. Now we have to fill out all the parameters - including our _DynatraceOneAgentLink_. Please choose a good name for the stack and provide the passwords for the database properties. When done **Click Next**
 ![](./images/lab4_configurestack.png)
 10. **Options**: Here you could define additonal tags that would automatically be picked up by Dynatrace OneAgent. Feel free to define a tag and explore that option. Once done **Click Next**
 11. **Review**: Review your settings - then **Click Create**
@@ -174,6 +172,15 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 Navigating to the Smartscape actually shows you how Dynatrace OneAgent really automatically detects every single process on that EC2 Linux instance including MySql and some other native processes
 ![](./images/lab4_lampsmartscape.png)
 
+**Optional Step: MySQL Monitoring**
+As the LAMP stack comes with MySQL we can easily setup [MySQL Monitoring with Dynatrace](https://www.dynatrace.com/technologies/database/mysql-monitoring/mysql-performance/).
+Follow these steps
+1. Click on Technologies and find the MySQL tile (notice the tile is light blue which means no deep monitoring in the moment)
+2. Click on the tile and navigate your way through the process groups until you end up on your MySQL Process Group.
+3. Follow the instructions to enable MySQL Monitoring. You will be able to specify username and password for Dynatrace to query your MySQL Database
+4. Once you are done you will see MySQL Metrics in your MySQL Process Group. Explore the _MySQL metrics_ as well as in _Further details_
+![](./images/lab4_mysql.png)
+
 **Useful Links**
 * [AWS CloudFormation documentation](https://aws.amazon.com/documentation/cloudformation/)
 
@@ -182,7 +189,15 @@ This lab from Amazon promotes Servless technology. It is often used on AWS Servl
 Please follow the instructions on the [AWS Lambda Zombie Workshop GitHub Repo](https://github.com/awslabs/aws-lambda-zombie-workshop). 
 For the Dynatrace lab we do not need to go through the full excercise. Just the initial deployment of the app and inintial configuration steps are sufficient to get the app up& running.
 
-Once the application is deployed you will see that Dynatrace automatically monitors those resources used by this iapplication: DynamoDB and Lambdas
-In order to enable Real User Monitoring we have to manually inject the Dynatrace JavaScript Tag because the HTML pages are static files delivered through S3.
+Once the application is deployed you will see that Dynatrace automatically monitors those resources used by this application: DynamoDB and Lambdas (through our AWS Monitoring Integration)
 
-The goal of this tutorial therefore is to see Dynatrace monitor DynamoDB, Lambda and Real User Activity.
+**Enable Real User Monitoring**
+In order to enable Real User Monitoring we have to manually inject the Dynatrace JavaScript Tag because the HTML pages are static files delivered through S3.
+Follow these steps to get this accomplished
+1. Go to S3 and browse to the index.html page in the zombiestack S3 bucket
+2. Download that index.html page
+3. In Dynatrace setup agentless monitoring for a new Zombie App. Copy that JavaScript snippet
+4. Edit the local index.html page and add the JavaScript snippet in the <head> of the html file
+5. Upload the modified index.html file
+From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
+![](./images/lab5_endusermonitoring)
