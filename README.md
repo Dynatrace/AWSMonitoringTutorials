@@ -28,7 +28,7 @@ The goal is to see the Dynatrace AWS Monitoring Dashboard populuated with data p
 ![](./images/lab1_awsdashboard.png)
 
 **Step-by-Step Guide**
-1. Open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). 
+1. For Dynatrace SaaS please open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). For Dynatrace Managed check out [Dynatrace Doc: How do I monitor AWS using role-based access?](https://help.dynatrace.com/dynatrace-managed/dynatrace-server/how-do-i-monitor-aws-using-role-based-access/)
 2. Follow the instructions for either Role or Key-based authentication
 3. Tip for Role-based: Make sure you remember the Role Name, your AWS Account ID and the External ID while creating the role. You will need it at the very last step of the configuration
 4. Tip for Key-based authentication: For quick evaluation I think this is the easiest path assuming your AWS User has the [required policies attached](http://assets.dynatrace.com/global/resources/aws-policy.json).
@@ -172,6 +172,15 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 Navigating to the Smartscape actually shows you how Dynatrace OneAgent really automatically detects every single process on that EC2 Linux instance including MySql and some other native processes
 ![](./images/lab4_lampsmartscape.png)
 
+**Optional Step: MySQL Monitoring**
+As the LAMP stack comes with MySQL we can easily setup [MySQL Monitoring with Dynatrace](https://www.dynatrace.com/technologies/database/mysql-monitoring/mysql-performance/).
+Follow these steps
+1. Click on Technologies and find the MySQL tile (notice the tile is light blue which means no deep monitoring in the moment)
+2. Click on the tile and navigate your way through the process groups until you end up on your MySQL Process Group.
+3. Follow the instructions to enable MySQL Monitoring. You will be able to specify username and password for Dynatrace to query your MySQL Database
+4. Once you are done you will see MySQL Metrics in your MySQL Process Group. Explore the _MySQL metrics_ as well as in _Further details_
+![](./images/lab4_mysql.png)
+
 **Useful Links**
 * [AWS CloudFormation documentation](https://aws.amazon.com/documentation/cloudformation/)
 
@@ -180,7 +189,15 @@ This lab from Amazon promotes Servless technology. It is often used on AWS Servl
 Please follow the instructions on the [AWS Lambda Zombie Workshop GitHub Repo](https://github.com/awslabs/aws-lambda-zombie-workshop). 
 For the Dynatrace lab we do not need to go through the full excercise. Just the initial deployment of the app and inintial configuration steps are sufficient to get the app up& running.
 
-Once the application is deployed you will see that Dynatrace automatically monitors those resources used by this iapplication: DynamoDB and Lambdas
-In order to enable Real User Monitoring we have to manually inject the Dynatrace JavaScript Tag because the HTML pages are static files delivered through S3.
+Once the application is deployed you will see that Dynatrace automatically monitors those resources used by this application: DynamoDB and Lambdas (through our AWS Monitoring Integration)
 
-The goal of this tutorial therefore is to see Dynatrace monitor DynamoDB, Lambda and Real User Activity.
+**Enable Real User Monitoring**
+In order to enable Real User Monitoring we have to manually inject the Dynatrace JavaScript Tag because the HTML pages are static files delivered through S3.
+Follow these steps to get this accomplished
+1. Go to S3 and browse to the index.html page in the zombiestack S3 bucket
+2. Download that index.html page
+3. In Dynatrace setup agentless monitoring for a new Zombie App. Copy that JavaScript snippet
+4. Edit the local index.html page and add the JavaScript snippet in the <head> of the html file
+5. Upload the modified index.html file
+From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
+![](./images/lab5_endusermonitoring)
