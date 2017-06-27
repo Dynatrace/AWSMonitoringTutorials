@@ -50,6 +50,10 @@ var server = http.createServer(function (req, res) {
 			// Usage: /api/echo?text=your text to be echoed!
 			status = "Thanks for saying: " + url.query["text"];
 		}
+		if(url.pathname === "/api/login") {
+			// Usage: /api/login?username=your user name 
+			status = "Welcome " + url.query["username"];
+		}
 		if(url.pathname === "/api/invoke") {
 			// Usage: /api/invoke?url=http://www.yourdomain.com 
 			var urlRequest = url.query["url"];

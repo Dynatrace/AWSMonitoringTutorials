@@ -100,6 +100,11 @@
 		<button id="Invoke">Invoke</button>
       </div>
 
+	  <div style="padding:16px;" id="loginarea">
+	    Your Username (can be used for user tagging) : <input type="textbox" id="Username" value="Joe Mueller"></input>
+		<button id="Login">LOG ME IN :-)</button>
+      </div>
+	  	  
 	  <div style="padding:16px;">
 		<button id="Version">Get MyVersion!</button>
       </div>
@@ -154,6 +159,17 @@
 		
 		$("#Version").click(function () {	
 		  executeCall("api/version");
+        });
+
+		$("#Login").click(function () {	
+		  var username = $('#Username').val();	
+		  var loggedinusername = $("#loggedinusername");
+		  if(loggedinusername.length <= 0) {
+		    $("<div id=\"usrhelparea\">You are now Logged in as user: <p id=\"loggedinusername\">" + username + "</p></div>").appendTo("#loginarea")
+		  } else {
+		    loggedinusername.text(username);
+		  }
+		  executeCall("api/login?username=" + username);
         });
 		
 	</script>	
