@@ -1,6 +1,7 @@
 <html>
   <head>
-    <title>Elastic Beanstalk</title>
+    <title>Node.JS Elastic Beanstalk Tutorial with Dynatrace</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <style>
       body {
         color: #ffffff;
@@ -74,10 +75,42 @@
   <body>
     <div class="textColumn">
       <h1>Congratulations</h1>
-      <p>Your first AWS Elastic Beanstalk Node.js application is now running on your own dedicated environment in the AWS Cloud</p>
+	  <img height="400px" src="https://github.com/Dynatrace/AWSMonitoringTutorials/raw/master/images/lab3_beanstalkloadbalanced.png" />
+      <p>This might be your first AWS Beanstalk App you ever deployed.
+	  The code base of this application was taken from the AWS Elastic Beanstalk Tutorial but was slightly modified for the Dynatrace AWS Tutorial that you can find <a href="https://github.com/Dynatrace/AWSMonitoringTutorials"/>here!</a>
+	  The goal of this tutorial is to enable Full Stack Monitoring with Dynatrace on your Beanstalk Application. Following is a screenshot of Dynatrace Smartcape in case you deploy this application in a scalability group:
+	  If you want to learn more about Dynatrace visit our website and get started with your own <a href="http://bit.ly/dtsaastrial">Dynatrace SaaS Trial!</a>
+	  <br><br>
+	  This page is served from HOSTNAME!
+	  </p>
     </div>
     <div class="linksColumn">
-      <h2>What's Next?</h2>
+      <h2>Lets trace some code!</h2>
+	  <div style="padding:16px;">
+        Sleep Setting (in ms): <input type="textbox" id="SleepTime" value="1000"></input>
+      </div>
+
+	  <div style="padding:16px;">
+        Say Something : <input type="textbox" id="SayText" value="Just say whatever you want"></input>
+		<button id="Echo">Echo</button>
+      </div>
+
+	  <div style="padding:16px;">
+        Invoke Server Side URL (full URL please) : <input type="textbox" id="RemoteURL" value="https://www.amazon.com"></input>
+		<button id="Invoke">Invoke</button>
+      </div>
+
+	  <div style="padding:16px;">
+		<button id="Version">Get MyVersion!</button>
+      </div>
+	  
+	  <div>
+	    <p id="result">Results will show up here!</p>
+	  </div>
+	  
+	  <br>
+	  <br>
+      <h2>External Links: To learn more about Beanstalk</h2>
       <ul>
         <li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html">AWS Elastic Beanstalk overview</a></li>
         <li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.html">AWS Elastic Beanstalk concepts</a></li>
@@ -86,7 +119,43 @@
         <li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_geddy_elasticache.html">Deploy a Geddy Application with Amazon ElastiCache to AWS Elastic Beanstalk </a></li>
         <li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_custom_container.html">Customizing and Configuring a Node.js Container </a></li>
         <li><a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.loggingS3.title.html">Working with Logs</a></li>
-      </ul>
-    </div>
+      </ul>	  
+	  </div>
+	
+    <script>	
+	    function getRESTEndpoint() {
+		  return window.location.href;
+		}
+		
+	    function executeCall(requestString, sleep) {
+          var sleepTime = $('#SleepTime').val();	  
+	      var fullURL = getRESTEndpoint() + requestString;
+		  if(fullURL.indexOf("?") > 0) fullURL = fullURL + "&sleep=" + sleepTime;
+		  else fullURL = fullURL + "?sleep=" + sleepTime;
+		  
+	      $.ajax({
+            url: fullURL
+          }).success(function(data) {
+             $('#result').text(data);
+          }).fail(function() {
+             $('#result').text("invoke failed!");
+	      });
+	    }
+		
+		$("#Echo").click(function () {	
+          var text = $('#SayText').val();	
+		  executeCall("api/echo?text=" + text);
+        });
+
+		$("#Invoke").click(function () {	
+          var text = $('#RemoteURL').val();		
+		  executeCall("api/invoke?url=" + text);
+        });
+		
+		$("#Version").click(function () {	
+		  executeCall("api/version");
+        });
+		
+	</script>	
   </body>
 </html>
