@@ -109,7 +109,6 @@ One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to 
 ![](./images/lab3_beanstalkec2instance.png)
 
 **Additional Step: Process Group Identification**
-
 Dynatrace automatically detects process groups and by default does a pretty good job in detecting the logical application deployed by looking at different environment variables or application server configuration files. If you want to override that process you can configure a custom Process Group Detection Rule. In our version.config file we specify a custom environment variable called MYVERSION. In this additional step we simply configure dynatrace to detect the Process Group Name based on that value in case this environment variable is set.
 1. In Dynatrace go to Settings -> Monitoring -> Process group detection
 2. Add a new rule for Node.js and specify MYVERSION as the environment variable to look at
@@ -123,12 +122,27 @@ Dynatrace automatically detects process groups and by default does a pretty good
 5. Go back to the same settings after restart and change auto scale to minimum instances of 2
 6. Apply changes and validate that Dynatrace detects both instances
 
+**Additional Step: Real User Monitoring**
+There are some additional RUM configurations we can define to better leverage Dynatrace Real User Monitoring
+1. Enable jQuery support for our Beanstalk Application. You can configure this through the Web Application Settings!
+2. [Configure User Tagging](https://www.dynatrace.com/blog/automatic-identification-users-based-page-metadata/). The Application has a login button which will then set the Username to an HTML Element with the ID #loggedinusername. Please configure User Tagging by picking up that value through CSS Selectors
+Now you should be able to find your user by looking for the user name and see every single interaction with any button. 
+*REMEMBER:* User Visits right now will show up once the Visits are completed which means after the 30 minutes timeout!
+
+**Additional Step: Request Tagging**
+Dynatrace provides a great way to dynamically tag web requests based on information passed to each web request. In our sample app we have calls to /api/version, /api/invoke, ...
+1. Go to Settings -> Server-Side -> [Request attributes](https://www.dynatrace.com/blog/request-attributes-simplify-request-searches-filtering/)
+2. Configure tagging for the pattern /api/\* and for the parameter text on /api/echo?echo=
+Try it out and then perform web request analysis based on these tags!
+
 Here is what you should see if you go to Smartscape. Dynatrace shows the logical Node.js service. The name BeanStalkService_v1 is actually taken from our previously defined custom process group detection. We also see that this service runs on 2 Node.js instances on two different EC2 hosts in two Availability Zones:
 ![](./images/lab3_beanstalkloadbalanced.png)
 
 **Useful Links**
 * [What Is AWS Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 * [Dynatrace Blog:Set up custom process group monitoring](https://www.dynatrace.com/blog/set-custom-process-groups-monitoring/)
+* [Request Attribute Tagging](https://www.dynatrace.com/blog/request-attributes-simplify-request-searches-filtering/)
+* [User Tagging with Dynatrace](https://www.dynatrace.com/blog/automatic-identification-users-based-page-metadata/)
 
 # Lab 4 Monitor LAMP Stack configured through CloudFormation
 This lab will teach us how to use a pre-configured CloudFormation stack to configure a classical LAMP stack. We will inject the Dynatrace OneAgent into the User Data portion of the EC2 instance launch by changing the CloudFormation template. This will allow us to create multipl stacks of the same LAMP stack including Dynatrace OneAgent monitoring
