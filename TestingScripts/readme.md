@@ -47,8 +47,8 @@ wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_6
 tar -xvf phantomjs-2.1.1-linux-x86_64.tar.bz2
 wget https://raw.githubusercontent.com/Dynatrace/AWSMonitoringTutorials/master/TestingScripts/nodejsbeanstalktest.js
 
-EXPORT PHANTOMHOME=./phantomjs-2.1.1-linux-x86_64/bin/phantomjs
-EXPORT NODEJSURL=http://YOURURL.elasticbeanstalk.com/
+export PHANTOMHOME=./phantomjs-2.1.1-linux-x86_64/bin/phantomjs
+export NODEJSURL=http://YOURURL.elasticbeanstalk.com/
 
 while true
 do
