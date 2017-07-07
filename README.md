@@ -125,7 +125,8 @@ Dynatrace automatically detects process groups and by default does a pretty good
 **Additional Step: Real User Monitoring**
 There are some additional RUM configurations we can define to better leverage Dynatrace Real User Monitoring
 1. Enable jQuery support for our Beanstalk Application. You can configure this through the Web Application Settings!
-2. [Configure User Tagging](https://www.dynatrace.com/blog/automatic-identification-users-based-page-metadata/). The Application has a login button which will then set the Username to an HTML Element with the ID #loggedinusername. Please configure User Tagging by picking up that value through CSS Selectors
+2. Configure Cookie Support for elasticbeanstalk.com domains: If you host your app on the default domain given by AWS you have to go into the Advanced Settings for your Application and specify your full domain name, e.g: custom-env.ub2cp9hmpy.us-west-2.elasticbeanstalk.com in the field **Domain to be used for cookie placement**. Otherwise your browser will reject the Dynatrace Cookies necessary for end user tagging. This step IS NOT necessary if you host your app on a "normal" domain! 
+3. [Configure User Tagging](https://www.dynatrace.com/blog/automatic-identification-users-based-page-metadata/). The Application has a login button which will then set the Username to an HTML Element with the ID #loggedinusername. Please configure User Tagging by picking up that value through CSS Selectors
 Now you should be able to find your user by looking for the user name and see every single interaction with any button. 
 *REMEMBER:* User Visits right now will show up once the Visits are completed which means after the 30 minutes timeout!
 
