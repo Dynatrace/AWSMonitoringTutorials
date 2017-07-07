@@ -8,30 +8,34 @@ if (system.args.length === 1) {
 }
 
 function random (low, high) {
-    return Math.round(Number(Math.random() * (high - low)) + low);
+    var randomResult = Math.round(Number(Math.random() * (high - low))) + low;
+	if(randomResult > high) randomResult = high;
+	return randomResult;
 }
 
-phantom.waitFor = function(callback) {
-  do {
+phantom.waitFor = function(callback, maxTime) {
+  var startTime = Date.now();
+  do { 
     // Clear the event queue while waiting.
     // This can be accomplished using page.sendEvent()
     this.page.sendEvent('mousemove');
-  } while (!callback());
+  } while (!callback() && ((Date.now() - startTime) < maxTime));
 }
-
-console.log(random(0, 10));
 
 // ======================================================================
 // Prep Work - Setting up our variables
 // ======================================================================
 var randomUserNames = ["Andi","Joe","Gabi","Stephan","Joshua","John","Asad","Ted","Karolina","Jilene","Marci","Katie","Laurie","Lynne","Peter","Wayne","Joe","Ted","Susan"];
 var randomEchStrings = ["Just Echo", "Another Echo", "Whats up?", "Hello??", "Somebody out there?"];
-var randomInvokeURLs = ["http://www.amazon.com","http://www.cnn.com","http://www.foxnews.com","http://www.twitter.com","http://www.facebook.com","http://www.orf.at","http://www.dynatrace.com"]
+var randomInvokeURLs = ["https://www.amazon.com","http://www.cnn.com","http://www.foxnews.com","https://www.twitter.com","https://www.facebook.com","http://www.orf.at","http://www.dynatrace.com"];
 t = Date.now();
 address = system.args[1];
 var username = (system.args.length > 2) ? system.args[2] : randomUserNames[random(0, randomUserNames.length)]; 
 var echostring = (system.args.length > 3) ? system.args[3] : randomEchStrings[random(0, randomEchStrings.length)];
 var invokeURL = (system.args.length > 4) ? system.args[4] : randomInvokeURLs[random(0, randomInvokeURLs.length)];
+if(username == null || username == "undefined") username = "Default User";
+if(echostring == null || echostring == "undefined") echostring = "Default Echo";
+if(invokeURL == null || invokeURL == "undefined") invokeURL = "https://aws.amazon.com";
 console.log("Start URL: " + address);
 console.log("Username: " + username);
 console.log("EchoString: " + echostring);
@@ -51,7 +55,7 @@ page.open(address, function(status) {
     }
 	page.loading = false;
 });
-phantom.waitFor(function() {return !page.loading;});
+phantom.waitFor(function() {return !page.loading;}, 5000);
 var currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
 
@@ -61,7 +65,7 @@ console.log("Current Result Text: " + currResultText);
 console.log("CLICK ON ECHO");
 page.evaluateJavaScript("function() { $('#SayText').val('" + echostring + "'); }");
 page.evaluateJavaScript("function() { $('#Echo').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText});
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
 currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
 
@@ -71,7 +75,7 @@ console.log("Current Result Text: " + currResultText);
 console.log("CLICK ON INVOKE");
 page.evaluateJavaScript("function() { $('#RemoteURL').val('" + invokeURL + "'); }");
 page.evaluateJavaScript("function() { $('#Invoke').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText});
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
 currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
 
@@ -81,7 +85,7 @@ console.log("Current Result Text: " + currResultText);
 console.log("CLICK ON LOGIN");
 page.evaluateJavaScript("function() { $('#Username').val('" + username + "'); }");
 page.evaluateJavaScript("function() { $('#Login').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText});
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
 currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
 
