@@ -4,7 +4,7 @@ var port = process.env.PORT || 3000,
 	os = require('os'),
     html = fs.readFileSync('index.html').toString().replace("HOSTNAME", os.hostname());
 	
-var defaultSleep = 500;
+var minSleep = 500;
 
 var log = function(entry) {
 	// console.log(entry);
@@ -12,6 +12,7 @@ var log = function(entry) {
 };
 
 function sleep(time) {
+	if(time < minSleep) time = minSleep;
     var stop = new Date().getTime();
     while(new Date().getTime() < stop + time) {
         ;
@@ -42,17 +43,17 @@ var server = http.createServer(function (req, res) {
 
         // sleep a bit :-)
 		var sleeptime = parseInt(url.query["sleep"]);
-		if(sleeptime === 0) sleeptime = defaultSleep;
+		if(sleeptime === 0) sleeptime = minSleep;
 		log("Sleeptime: " + sleeptime);
 		sleep(sleeptime);
 
 		// figure out which API call they want to execute
         var status = "Unkown API Call";
 		if(url.pathname === "/api/sleeptime") {
-			// Usage: /api/sleeptime?default=1234 
-			var sleepValue = parseInt(url.query["default"]);
-			if(sleepValue >= 0 && sleepValue <= 10000) defaultSleep = sleepValue;
-			status = "Default Sleep Time set to " + defaultSleep;
+			// Usage: /api/sleeptime?min=1234 
+			var sleepValue = parseInt(url.query["min"]);
+			if(sleepValue >= 0 && sleepValue <= 10000) minSleep = sleepValue;
+			status = "Minimum Sleep Time set to " + minSleep;
 		}
 		if(url.pathname === "/api/echo") {
 			// Usage: /api/echo?text=your text to be echoed!

@@ -13,13 +13,16 @@ function random (low, high) {
 	return randomResult;
 }
 
+var minWaitFor = 5000;
 phantom.waitFor = function(callback, maxTime) {
   var startTime = Date.now();
+  var timeLapsed = 0;
   do { 
     // Clear the event queue while waiting.
     // This can be accomplished using page.sendEvent()
     this.page.sendEvent('mousemove');
-  } while (!callback() && ((Date.now() - startTime) < maxTime));
+	timeLapsed = (Date.now() - startTime);
+  } while ((timeLapsed < minWaitFor) || (!callback() && (timeLapsed < maxTime)));
 }
 
 // ======================================================================
@@ -45,6 +48,12 @@ console.log("InvokeURL: " + invokeURL);
 // Step 1: Load the initial page
 // ======================================================================
 page.loading = true;
+/*page.onResourceRequested = function(request) {
+  console.log('Request ' + JSON.stringify(request, undefined, 4));
+};
+page.onResourceReceived = function(response) {
+  console.log('Receive ' + JSON.stringify(response, undefined, 4));
+};*/
 page.open(address, function(status) {
     if (status !== 'success') {
       console.log('FAIL to load the address');
@@ -55,39 +64,40 @@ page.open(address, function(status) {
     }
 	page.loading = false;
 });
-phantom.waitFor(function() {return !page.loading;}, 5000);
+phantom.waitFor(function() {return !page.loading;}, 8000);
 var currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
 
 // ======================================================================
-// Step 2: Click on Echo
-// ======================================================================
-console.log("CLICK ON ECHO");
-page.evaluateJavaScript("function() { $('#SayText').val('" + echostring + "'); }");
-page.evaluateJavaScript("function() { $('#Echo').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
-currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
-
-// ======================================================================
-// Step 3: Click on Invoke
-// ======================================================================
-console.log("CLICK ON INVOKE");
-page.evaluateJavaScript("function() { $('#RemoteURL').val('" + invokeURL + "'); }");
-page.evaluateJavaScript("function() { $('#Invoke').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
-currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
-
-// ======================================================================
-// Step 4: Login
+// Step 2: Login
 // ======================================================================
 console.log("CLICK ON LOGIN");
 page.evaluateJavaScript("function() { $('#Username').val('" + username + "'); }");
 page.evaluateJavaScript("function() { $('#Login').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 5000);
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
 currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
 console.log("Current Result Text: " + currResultText);
+
+// ======================================================================
+// Step 3: Click on Echo
+// ======================================================================
+console.log("CLICK ON ECHO");
+page.evaluateJavaScript("function() { $('#SayText').val('" + echostring + "'); }");
+page.evaluateJavaScript("function() { $('#Echo').click(); }");
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
+currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
+console.log("Current Result Text: " + currResultText);
+
+// ======================================================================
+// Step 4: Click on Invoke
+// ======================================================================
+console.log("CLICK ON INVOKE");
+page.evaluateJavaScript("function() { $('#RemoteURL').val('" + invokeURL + "'); }");
+page.evaluateJavaScript("function() { $('#Invoke').click(); }");
+phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
+currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
+console.log("Current Result Text: " + currResultText);
+
 
 console.log("DONE!!");
 
