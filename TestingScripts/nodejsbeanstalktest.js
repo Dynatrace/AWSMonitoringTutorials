@@ -73,12 +73,12 @@ function stepFinish(nextStep) {
 // ======================================================================
 function step1Open() {
   page.loading = true;
-  page.onResourceRequested = function(request) {
+  /*page.onResourceRequested = function(request) {
     console.log('Request ' + JSON.stringify(request, undefined, 4));
   };
   page.onResourceReceived = function(response) {
     console.log('Receive ' + JSON.stringify(response, undefined, 4));
-  };
+  };*/
   page.open(address, function(status) {
       if (status !== 'success') {
         console.log('FAIL to load the address');
