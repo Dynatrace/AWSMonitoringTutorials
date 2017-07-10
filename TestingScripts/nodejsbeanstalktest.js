@@ -2,18 +2,28 @@ var page = require('webpage').create(),
   system = require('system'),
   t, address;
 
+// ======================================================================
+// Usage
+// ======================================================================
 if (system.args.length === 1) {
   console.log('Usage: nodejsbeanstalktest.js <startURL> [<Username> <Echostring> <InvokeURL>]');
   phantom.exit();
 }
 
+// ======================================================================
+// Helper Functions
+// ======================================================================
 function random (low, high) {
     var randomResult = Math.round(Number(Math.random() * (high - low))) + low;
 	if(randomResult > high) randomResult = high;
 	return randomResult;
 }
 
-var minWaitFor = 5000;
+function clickOnElementById(id) {
+	page.evaluateJavaScript("function() { var ev=document.createEvent('MouseEvent');ev.initMouseEvent('click',true,true,window, null, 0, 0, 0, 0,false,false,false,false,0,null); document.getElementById('" + id + "').dispatchEvent(ev); }");
+}
+
+var minWaitFor = 0;
 phantom.waitFor = function(callback, maxTime) {
   var startTime = Date.now();
   var timeLapsed = 0;
@@ -45,60 +55,77 @@ console.log("EchoString: " + echostring);
 console.log("InvokeURL: " + invokeURL);
 
 // ======================================================================
+// Step Finish: Waits until the step is done and then moves to the next or stops the script execution
+// ======================================================================
+function stepFinish(nextStep) {
+  phantom.waitFor(function() {return !page.loading;}, 3000);
+  var currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
+  console.log("Current Result Text: " + currResultText);
+  
+  if(nextStep != null) nextStep(); else {
+	console.log("DONE!!");
+    phantom.exit();
+  }
+}
+
+// ======================================================================
 // Step 1: Load the initial page
 // ======================================================================
-page.loading = true;
-/*page.onResourceRequested = function(request) {
-  console.log('Request ' + JSON.stringify(request, undefined, 4));
-};
-page.onResourceReceived = function(response) {
-  console.log('Receive ' + JSON.stringify(response, undefined, 4));
-};*/
-page.open(address, function(status) {
-    if (status !== 'success') {
-      console.log('FAIL to load the address');
-    } else {
-      t = Date.now() - t;
-      console.log('Loading ' + system.args[1]);
-      console.log('Loading time ' + t + ' msec');
-    }
-	page.loading = false;
-});
-phantom.waitFor(function() {return !page.loading;}, 8000);
-var currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
+function step1Open() {
+  page.loading = true;
+  page.onResourceRequested = function(request) {
+    console.log('Request ' + JSON.stringify(request, undefined, 4));
+  };
+  page.onResourceReceived = function(response) {
+    console.log('Receive ' + JSON.stringify(response, undefined, 4));
+  };
+  page.open(address, function(status) {
+      if (status !== 'success') {
+        console.log('FAIL to load the address');
+      } else {
+        t = Date.now() - t;
+        console.log('Loading ' + system.args[1]);
+        console.log('Loading time ' + t + ' msec');
+      }
+	  page.loading = false;
+
+	  setTimeout(stepFinish, 5000, step2Login);
+  });
+}
 
 // ======================================================================
 // Step 2: Login
 // ======================================================================
-console.log("CLICK ON LOGIN");
-page.evaluateJavaScript("function() { $('#Username').val('" + username + "'); }");
-page.evaluateJavaScript("function() { $('#Login').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
-currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
+function step2Login() {
+  console.log("CLICK ON LOGIN");
+  page.evaluateJavaScript("function() { $('#Username').val('" + username + "'); }");
+  clickOnElementById("Login");
+  
+  setTimeout(stepFinish, 5000, step3Echo);  
+}
 
 // ======================================================================
 // Step 3: Click on Echo
 // ======================================================================
-console.log("CLICK ON ECHO");
-page.evaluateJavaScript("function() { $('#SayText').val('" + echostring + "'); }");
-page.evaluateJavaScript("function() { $('#Echo').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
-currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
+function step3Echo() {
+  console.log("CLICK ON ECHO");
+  page.evaluateJavaScript("function() { $('#SayText').val('" + echostring + "'); }");
+  clickOnElementById("Echo");
+  
+  setTimeout(stepFinish, 5000, step4Invoke);
+}
 
 // ======================================================================
 // Step 4: Click on Invoke
 // ======================================================================
-console.log("CLICK ON INVOKE");
-page.evaluateJavaScript("function() { $('#RemoteURL').val('" + invokeURL + "'); }");
-page.evaluateJavaScript("function() { $('#Invoke').click(); }");
-phantom.waitFor(function() {return page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result") != currResultText}, 8000);
-currResultText = page.evaluate(function(id) {return document.getElementById(id).innerText;}, "result");
-console.log("Current Result Text: " + currResultText);
+function step4Invoke() {
+  console.log("CLICK ON INVOKE");
+  page.evaluateJavaScript("function() { $('#RemoteURL').val('" + invokeURL + "'); }");
+  clickOnElementById("Invoke");
+  
+  setTimeout(stepFinish, 5000, null);
+}
 
 
-console.log("DONE!!");
-
-phantom.exit();
+// LAUNCH Script
+step1Open();
