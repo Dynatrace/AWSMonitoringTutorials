@@ -159,7 +159,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
         "Type": "String",
         "MaxLength": "256",
         "ConstraintDescription": "Full Download Link to your Dynatrace OneAgent. Get this from your Settings -> Deploy screen in your Dynatrace SaaS/Managed console"
-    } 
+    }, 
 ```
 4. Now we are going to add a similar User Data startup script as we did when instrumenting a regular EC2 Instance launch. Scroll down to the "UserData" Property Definition. Right after the line "yum update -y aws-cfn-bootstrap\n" we will add the following code.:
 ```
@@ -170,7 +170,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
                 "Ref": "DynatraceOneAgentLink"
             },
             "\n",
-            "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
+            "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1\n",
 ```
 5. **Click on "Validate Template"** in the toolbar to make sure you have no typos. **PROBLEMS??** If you dont waste too much time feel free to copy/paste the [complete template from here!](/LAMPCloudFormationSample/LAMPTemplateWITHDynatraceOneAgent)
 6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where the actual download link is configurable through _DynatraceOneAgentLink_.
