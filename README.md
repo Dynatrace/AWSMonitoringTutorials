@@ -199,7 +199,33 @@ Follow these steps
 **Useful Links**
 * [AWS CloudFormation documentation](https://aws.amazon.com/documentation/cloudformation/)
 
-# Lab 5 AWS Lambda Zombie Workshop
+# Lab 5 AWS ECS Container Monitoring
+
+If you are new to ECS and want to get a quick start I recommend walking through the sample application deployment wizard. This wizard will create 
+1. Your First ECS Cluster
+2. A EC2 Launch Configuration
+3. A Auto Scaling Group using that Launch Configuration
+4. A Task that runs a sample web site in a container
+
+In order to get Dynatrace Monitoring into that wizard generated scenario I found the easiest to modify the EC2 Launch Configuration and adding the Dynatrace OneAgent Installation steps to the User Data confiugration. As AWS doesnt allow to edit an existing Launch Configuration we have to copy it, modify it and then change the Auto Scaling group to point to our new Launch Configuration.
+Here are the steps involved
+1. Make a copy of the Wizard generated Launch Configuration
+2. Edit the User Data portion and add the OneAgent Installation steps. *ATTENTION:* The default AMI that is used for ECS EC2 Container Instances doesnt come with wget but it comes with curl. I also noticed I have to execute the install script with sudo in order for the installation script to run as root. Here is the code snippet that should work:
+```
+#!/bin/bash
+curl -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOADLINK
+sudo /bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
+```
+3. Edit the Auto Scaling Group and configure it to use your new EC2 Launch Configuration
+4. Terminate the current EC2 Instances that were created previously. The Auto Scaling Group will make sure to launch new ones but now using your new Launch Configuration
+
+THATS IT :-)
+
+# Lab 6 AWS CodeDeploy - Blue / Green Deployment
+
+Similar to the ECS Lab I suggest you use the wizard that will create all configuration entries to deploy an app using a Blue/Green Deployment model. And just as we did in the ECS Lab I think the best way to inject the Dynatrace OneAgent is to duplicate the EC2 Launch Configuration, add the OneAgent Installation steps and then use this new Launch Configuration for the Auto Scaling Group that the wizard also created. That should do the trick!
+
+# Lab 7 AWS Lambda Zombie Workshop
 This lab from Amazon promotes Servless technology. It is often used on AWS Servless Meetups and Hackathons.
 Please follow the instructions on the [AWS Lambda Zombie Workshop GitHub Repo](https://github.com/awslabs/aws-lambda-zombie-workshop). 
 For the Dynatrace lab we do not need to go through the full excercise. Just the initial deployment of the app and inintial configuration steps are sufficient to get the app up& running.
