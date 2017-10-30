@@ -6,7 +6,9 @@ In this tutorial we have different labs where we learn different use cases on ho
 2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
 3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
 4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
-4. [Lab 5: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-5-aws-lambda-zombie-workshop)
+5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
+6. [Lab 6: AWS CodeDeploy - Blue / Green Deployment](#lab-6-aws-codedeploy-blue-/-green-Deployment)
+7. [Lab 7: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-7-aws-lambda-zombie-workshop)
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
