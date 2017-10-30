@@ -7,7 +7,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
 4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
 5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
-6. [Lab 6: AWS CodeDeploy - Blue / Green Deployment](#lab-6-aws-codedeploy--blue--green-deployment)
+6. [Lab 6: AWS CodeDeploy - Blue / Green Deployment](#lab-6-aws-codedeploy---blue--green-deployment)
 7. [Lab 7: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-7-aws-lambda-zombie-workshop)
 
 ## Pre-Requisits
