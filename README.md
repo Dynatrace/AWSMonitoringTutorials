@@ -227,6 +227,9 @@ THATS IT :-)
 
 Similar to the ECS Lab I suggest you use the wizard that will create all configuration entries to deploy an app using a Blue/Green Deployment model. And just as we did in the ECS Lab I think the best way to inject the Dynatrace OneAgent is to duplicate the EC2 Launch Configuration, add the OneAgent Installation steps and then use this new Launch Configuration for the Auto Scaling Group that the wizard also created. That should do the trick!
 
+Here is a screenshot of my User Data configuration for the edited Launch Configuration. You can see the OneAgent installation procedure I added just before the AWS CodeDeploy Agent gets installed
+![](./images/lab6_bluegreen_launchconfiguration_userdata.png)
+
 # Lab 7 AWS Lambda Zombie Workshop
 This lab from Amazon promotes Servless technology. It is often used on AWS Servless Meetups and Hackathons.
 Please follow the instructions on the [AWS Lambda Zombie Workshop GitHub Repo](https://github.com/awslabs/aws-lambda-zombie-workshop). 
