@@ -834,9 +834,7 @@
                                   "Ref": "DynatraceOneAgentLink"
                                 },
                                 "\n",
-                                "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
-                                "\n",
-                                "/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0\n",
+                                "sudo /bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1\n",
                                 "# Install the files and packages from the metadata\n",
                                 "/opt/aws/bin/cfn-init -v ",
                                 "         --stack ",
