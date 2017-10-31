@@ -97,7 +97,7 @@ One way to install a Dynatrace OneAgent on such a Beantstalk EC2 instance is to 
 **Prerequisit**
 1. Download the NodeJSBeanStalkSample from this GitHub Repo
 2. Explore the .ebextensions directory as explained above
-3. Create a ZIP file of the full NodeJSBeanStalkSample including .ebextension directory
+3. Create a ZIP file of the full NodeJSBeanStalkSample including .ebextension directory. ATTENTION MAC USERS: Please make sure to create the zip from your terminal. Otherwise you may end up with the __MACOSX subfolder which can become a problem later on
 
 **Step-by-Step-Guide**
 1. Logon to AWS and Navigate to Elastic Beanstalk. [This link](https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home) should also get you there
@@ -178,7 +178,7 @@ This lab will teach us how to use a pre-configured CloudFormation stack to confi
 6. Now we have a CloudFormation script that will launch a LAMP Stack but that will also install a Dynatrace OneAgent where the actual download link is configurable through _DynatraceOneAgentLink_.
 7. **Click on Create Stack** in the toolbar. This will get you back to the previous screen with your new template already uploaded to S3
 8. **Click on Next**
-9. Now we have to fill out all the parameters - including our _DynatraceOneAgentLink_. Please choose a good name for the stack and provide the passwords for the database properties. When done **Click Next**
+9. Now we have to fill out all the parameters - including our _DynatraceOneAgentLink_. For the Dynatrace One Agent Link make sure to copy the complete path INCLUDING the " (quotes). Please also choose a good name for the stack and provide any type of passwords for the database properties. When done **Click Next**
 ![](./images/lab4_configurestack.png)
 10. **Options**: Here you could define additonal tags that would automatically be picked up by Dynatrace OneAgent. Feel free to define a tag and explore that option. Once done **Click Next**
 11. **Review**: Review your settings - then **Click Create**
