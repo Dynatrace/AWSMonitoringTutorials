@@ -50,11 +50,11 @@ Another very convenient approach for EC2 is to specify startup scripts that auto
 1. Logon to AWS and navigate to EC2. [This link](https://us-east-2.console.aws.amazon.com/ec2/v2/home) should also get you there!
 2. Now select the option to **Launch a new Instance**
 3. Select **Amazon Linux AMI** and then select the free tier eligible **t2.micro** instance type. Select Next
-4. **Configure Instance:** Expand the Advanced section and specify the following User Data script (make sure you use your unique OneAgent Download URI) 
+4. **Configure Instance:** Expand the Advanced section and specify the following User Data script (make sure you use your unique OneAgent Download URI or simply use the full two script lines that you see in the Dynatrace Deploy Agent Web UI) 
 ```
 #!/bin/bash
 wget -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOADLINK
-/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
+/bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1
 ```
 5. Click next and make yourself familiar with Storage options. We keep the defaults 
 6. **Add Tags:** on this configuration screen we add a custom tag. Key=EC2InstanceType; Value=LabExcercise. 
