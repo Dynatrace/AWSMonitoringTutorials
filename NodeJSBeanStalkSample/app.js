@@ -11,6 +11,9 @@ var log = function(entry) {
     fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
 };
 
+// ======================================================================
+// Very inefficient way to "sleep"
+// ======================================================================
 function sleep(time) {
 	if(time < minSleep) time = minSleep;
     var stop = new Date().getTime();

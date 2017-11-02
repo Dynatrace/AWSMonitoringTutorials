@@ -53,6 +53,7 @@ console.log("Start URL: " + address);
 console.log("Username: " + username);
 console.log("EchoString: " + echostring);
 console.log("InvokeURL: " + invokeURL);
+phantom.cookieEnabled = true;
 
 // ======================================================================
 // Step Finish: Waits until the step is done and then moves to the next or stops the script execution
@@ -73,12 +74,13 @@ function stepFinish(nextStep) {
 // ======================================================================
 function step1Open() {
   page.loading = true;
-  /*page.onResourceRequested = function(request) {
-    console.log('Request ' + JSON.stringify(request, undefined, 4));
+  page.onResourceRequested = function(request, networkRequest) {
+    console.log('Request ' + JSON.stringify(request, undefined, 4));	
+	console.log('Cookies' + JSON.stringify(page.cookies, undefined, 4));
   };
   page.onResourceReceived = function(response) {
-    console.log('Receive ' + JSON.stringify(response, undefined, 4));
-  };*/
+    // console.log('Receive ' + JSON.stringify(response, undefined, 4));
+  };
   page.open(address, function(status) {
       if (status !== 'success') {
         console.log('FAIL to load the address');
@@ -88,6 +90,8 @@ function step1Open() {
         console.log('Loading time ' + t + ' msec');
       }
 	  page.loading = false;
+	  
+	  console.log('Cookies' + JSON.stringify(page.cookies, undefined, 4));
 
 	  setTimeout(stepFinish, 5000, step2Login);
   });
@@ -101,7 +105,7 @@ function step2Login() {
   page.evaluateJavaScript("function() { $('#Username').val('" + username + "'); }");
   clickOnElementById("Login");
   
-  setTimeout(stepFinish, 5000, step3Echo);  
+  setTimeout(stepFinish, 5000, step3Echo);
 }
 
 // ======================================================================
