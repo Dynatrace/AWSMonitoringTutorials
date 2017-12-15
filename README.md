@@ -32,7 +32,7 @@ The goal is to see the Dynatrace AWS Monitoring Dashboard populuated with data p
 ![](./images/lab1_awsdashboard.png)
 
 **Step-by-Step Guide**
-1. For Dynatrace SaaS please open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://help.dynatrace.com/infrastructure-monitoring/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). For Dynatrace Managed check out [Dynatrace Doc: How do I monitor AWS using role-based access?](https://help.dynatrace.com/dynatrace-managed/dynatrace-server/how-do-i-monitor-aws-using-role-based-access/)
+1. For Dynatrace SaaS please open [Dynatrace Doc: How do I start Amazon Web Service Monitoring](https://www.dynatrace.com/support/help/cloud-platforms/amazon-web-services/how-do-i-start-amazon-web-services-monitoring/). For Dynatrace Managed check out [Dynatrace Doc: How do I monitor AWS using role-based access?](https://help.dynatrace.com/dynatrace-managed/dynatrace-server/how-do-i-monitor-aws-using-role-based-access/)
 2. Follow the instructions for either Role or Key-based authentication
 3. Tip for Role-based: Make sure you remember the Role Name, your AWS Account ID and the External ID while creating the role. You will need it at the very last step of the configuration
 4. Tip for Key-based authentication: For quick evaluation I think this is the easiest path assuming your AWS User has the [required policies attached](http://assets.dynatrace.com/global/resources/aws-policy.json).
