@@ -249,3 +249,24 @@ Follow these steps to get this accomplished
 5. Upload the modified index.html file
 From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
 ![](./images/lab5_endusermonitoring.png)
+    
+# Lab 8 AWS Lambda Wild Rydes Workshop
+This is a step by step workshop by Amazon on Deploying a Serverless Web Application. 
+Please follow the instructions on [Serverless Web Application Workshop](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication). 
+We will go over the steps - 1 to 4. Whcih will include hosting the application on S3, User Management using Cognito, Serverless Backend deployment and Restful API's 
+
+The monitoring will need to be enabled on two layers - Static website (Real User Monitoring), Serverless backend (OneAgent with Lambda) 
+
+**Enable Real User Monitoring**
+Follow the following: 
+1. Go to S3 and browse to the index.html page in the Wild Rydes S3 bucket
+2. Download that index.html page
+3. In Dynatrace setup agentless monitoring for a new Wild Rydes App. Copy that JavaScript snippet
+4. Edit the local index.html page and add the JavaScript snippet in the <head> of the html file
+5. Upload the modified index.html file
+6. Add the JavaScript Snippet to all the other html pages in the website in the same way. 
+From now on, every time you access the Wild Rydes Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
+
+**Integrate Lambda Function with Dynatrace OneAgent**
+Follow the following:
+1. 
