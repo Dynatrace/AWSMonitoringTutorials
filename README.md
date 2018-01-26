@@ -6,6 +6,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 
 1. [Lab 1: Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dynatrace-aws-monitoring-integration)
 2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
+2(a). [Lab 2(a): Monitoring EC2 instance with inbuilt application] (#Lab-2(a)-Launch-an-Ec2-Instance-InBuiltApp-DynatraceOneAgent)
 3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
 4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
 5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
