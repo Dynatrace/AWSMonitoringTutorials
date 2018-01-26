@@ -78,6 +78,21 @@ If something doesnt go as expected what to do? Well - Amazon provides a good way
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 * [Running commands on your Windows Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html#user-data-execution)
 
+# Lab 2(a) Launch an Ec2 Instance-InBuiltApp-DynatraceOneAgent
+In this step we will Launch an EC2 instance with an inbuilt Docker application, install Dynatrace OneAgent and access the Dynatrace Web UI to view our instance being monitored. 
+
+**Step by Step Guide**
+1. Log into to AWS console
+2. Select EC2 and Click on Launch an Instance. Make sure you are launching the EC2 instance in Oregon region (Top right menu)
+3. Click on Community AMI's. In the Search box type dynatrace. Select the image **Dynatrace_Easytravel_Docker_EC2**
+![](./images/lab2a_ec2imageselection.PNG)
+4. Select **t2.medium** instance type and Click on **Configure Instance Details**
+5. Expand the Advanced Details and specify the following User Data script (Grab the unique URL for Dynatrace OneAgent install from your Dynatrace UI)
+![].(./images/lab2a_userdatascript.PNG)
+6. Click Next, explore the options and Launch the EC2 instance. (You will have to generate or use an already existing Key to remote into the EC2 instance)
+7. Now we will look into the Dynatrace UI to see monitoring data
+
+
 # Lab 3 Monitor-NodeJS-Beanstalk-Application
 This lab will teach us how to install a Dynatrace OneAgent into a Node.js application deployed with AWS Beanstalk.
 As a base we use the sample node.js application that AWS uses in their tutorials. For more information see ...
