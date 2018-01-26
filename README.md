@@ -88,7 +88,7 @@ In this step we will Launch an EC2 instance with an inbuilt Docker application, 
 ![](./images/lab2a_ec2imageselection.PNG)
 4. Select **t2.medium** instance type and Click on **Configure Instance Details**
 5. Expand the Advanced Details and specify the following User Data script (Grab the unique URL for Dynatrace OneAgent install from your Dynatrace UI)
-![].(./images/lab2a_userdatascript.PNG)
+![](./images/lab2a_userdatascript.PNG)
 6. Click Next, explore the options and Launch the EC2 instance. (You will have to generate or use an already existing Key to remote into the EC2 instance)
 7. Now we will look into the Dynatrace UI to see monitoring data
 
