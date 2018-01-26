@@ -6,7 +6,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 
 1. [Lab 1: Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dynatrace-aws-monitoring-integration)
 2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
-2(a). [Lab 2(a): Monitoring EC2 instance with inbuilt application] (#Lab-2(a)-Launch-an-Ec2-Instance-InBuiltApp-DynatraceOneAgent)
+  * [Lab 2(a): Monitoring EC2 instance with inbuilt application](#lab-2a-launch-an-ec2-instance-dynatraceoneagent-and-docker-application)
 3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
 4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
 5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
@@ -79,17 +79,26 @@ If something doesnt go as expected what to do? Well - Amazon provides a good way
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 * [Running commands on your Windows Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html#user-data-execution)
 
-# Lab 2(a) Launch an Ec2 Instance-InBuiltApp-DynatraceOneAgent
+# Lab 2a Launch an Ec2 Instance DynatraceOneAgent and docker application
 In this step we will Launch an EC2 instance with an inbuilt Docker application, install Dynatrace OneAgent and access the Dynatrace Web UI to view our instance being monitored. 
 
 **Step by Step Guide**
 1. Log into to AWS console
 2. Select EC2 and Click on Launch an Instance. Make sure you are launching the EC2 instance in Oregon region (Top right menu)
 3. Click on Community AMI's. In the Search box type dynatrace. Select the image **Dynatrace_Easytravel_Docker_EC2**
+
 ![](./images/lab2a_ec2imageselection.PNG)
+
 4. Select **t2.medium** instance type and Click on **Configure Instance Details**
 5. Expand the Advanced Details and specify the following User Data script (Grab the unique URL for Dynatrace OneAgent install from your Dynatrace UI)
-![](./images/lab2a_userdatascript.PNG)
+
+```
+#!/bin/sh
+wget <Your DynatraceOneAgent DOWNLOAD URL>
+/bin/sh <DynatraceOne Agent installer script> 
+chown ec2-user:ec2-user /home/ec2-user/easyTravel-Docker/docker-compose.yml
+/usr/local/bin/docker-compose -f /home/ec2-user/easyTravel-Docker/docker-compose.yml up -d
+```
 6. Click Next, explore the options and Launch the EC2 instance. (You will have to generate or use an already existing Key to remote into the EC2 instance)
 7. Now we will look into the Dynatrace UI to see monitoring data
 
