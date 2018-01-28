@@ -12,6 +12,7 @@ In this tutorial we have different labs where we learn different use cases on ho
 5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
 6. [Lab 6: AWS CodeDeploy - Blue / Green Deployment](#lab-6-aws-codedeploy---blue--green-deployment)
 7. [Lab 7: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-7-aws-lambda-zombie-workshop)
+8. [Lab 8: Monitoring AWS Lambda Functions](#lab-8-monitoring-aws-lambda-functions)
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
@@ -275,23 +276,85 @@ Follow these steps to get this accomplished
 From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
 ![](./images/lab5_endusermonitoring.png)
     
-# Lab 8 AWS Lambda Wild Rydes Workshop
-This is a step by step workshop by Amazon on Deploying a Serverless Web Application. 
-Please follow the instructions on [Serverless Web Application Workshop](https://github.com/awslabs/aws-serverless-workshops/tree/master/WebApplication). 
-We will go over the steps - 1 to 4. Whcih will include hosting the application on S3, User Management using Cognito, Serverless Backend deployment and Restful API's 
+# Lab 8 Monitoring AWS Lambda Functions
+This is a step by step workshop by Amazon on Deploying a Lambda Function and monitoring it with Dynatrace
 
-The monitoring will need to be enabled on two layers - Static website (Real User Monitoring), Serverless backend (OneAgent with Lambda) 
+First we will create a Lambda Function. Select Lambda from AWS Services and Click on Create Function
+Provide the Name of the Lambda function - sampleLambdaFunction
+Runtime selected is Node.js 6.10
+Choose already existing role: service-role/admin
+![](./images/lab8_createLambdaFunction.PNG)
 
-**Enable Real User Monitoring**
-Follow the following: 
-1. Go to S3 and browse to the index.html page in the Wild Rydes S3 bucket
-2. Download that index.html page
-3. In Dynatrace setup agentless monitoring for a new Wild Rydes App. Copy that JavaScript snippet
-4. Edit the local index.html page and add the JavaScript snippet in the <head> of the html file
-5. Upload the modified index.html file
-6. Add the JavaScript Snippet to all the other html pages in the website in the same way. 
-From now on, every time you access the Wild Rydes Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
+Explore the Lambda console. In the Editor section copy the following code:
+
+```
+/**
+ * This is a very simply lambda function that simply executes random HTTP Requests to a randomly selected group of URLs
+ * With the Dynatrace OneAgent injected you can end-to-end trace these calls
+ * 
+ */ 
+exports.handler = (event, context, callback) => {
+    // TODO implement
+    executeRequest("http://www.dynatrace.com");
+    executeRequest("http://www.amazon.com");
+    executeRequest("http://www.google.com");
+};
+
+var executeRequest = function(url, callback) {
+    var https = require("https");
+    var fullUrl = require("url").parse(url);
+
+    var request_options = {
+      host: fullUrl.host,
+      path: fullUrl.path,
+      method: 'GET',
+    };
+
+    // Set up the request
+    var get_req = https.request(request_options, function(res) {
+        var responseBody = "";
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            responseBody += chunk;
+        });
+        res.on('end', function() {
+            console.log(url + ": StatusCode = " + res.statusCode + " ContentLength: " + responseBody.length);
+            //callback(null, null);
+        });
+    });
+
+    // post the data
+    get_req.end();    
+    
+}
+```
+
+Click On Save. 
+
+You can test the Lambda Function from the Console. Click on Test. This will ask you to create a test event. Use the Hello World template to test (you will need to provide a name to the test event) 
+
+![](./images/lab8_lambdaExecutionSuccess.PNG)
 
 **Integrate Lambda Function with Dynatrace OneAgent**
-Follow the following:
-1. 
+Follow the following steps:
+1. Create another function named dynatraceSampleLambda
+2. Go to the Dynatrace Console 
+3. Click on Deploy Dynatrace
+4. Select the Setup Serverless Integration option
+
+![](./images/lab8_serverlessIntegration.PNG) 
+
+5. For the sake of the workshop, we have already taken care of Step 1 (installing the Node Module)
+6. Select the option to add the code from an S3 bucket. Use the following URL for the S3 bucket
+```
+https://s3-us-west-2.amazonaws.com/dynatrace-api-data/sampleLambdaFunction.zip
+```
+![](./images/lab8_s3bucketURL.PNG)
+
+Copy the other settings from the Dynatrace UI to the Lambda Console
+
+![](./images/lab8_lambdaOptionsScreen.PNG)
+
+7. Now let us test the function and then take a look at the Dynatrace UI to see the Lambda Function data coming in
+
+![](./images/lab8_LambdaFunctionPurePath.PNG)
