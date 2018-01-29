@@ -287,7 +287,7 @@ Choose already existing role: service-role/admin
 
 Explore the Lambda console. In the Editor section copy the following code:
 
-```
+```js
 /**
  * This is a very simply lambda function that simply executes random HTTP Requests to a randomly selected group of URLs
  * With the Dynatrace OneAgent injected you can end-to-end trace these calls
