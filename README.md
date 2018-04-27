@@ -6,11 +6,13 @@ In this tutorial we have different labs where we learn different use cases on ho
 
 1. [Lab 1: Setting up AWS Monitoring through Cloud Watch Integration](#lab-1-setup-dynatrace-aws-monitoring-integration)
 2. [Lab 2: Monitoring EC2 Instances with Dynatrace OneAgent](#lab-2-install-oneagent-on-ec2-instance)
+  * [Lab 2(a): Monitoring EC2 instance with inbuilt application](#lab-2a-launch-an-ec2-instance-dynatraceoneagent-and-docker-application)
 3. [Lab 3: Monitoring Node.JS deployed through AWS Beanstalk](#lab-3-monitor-nodejs-beanstalk-application)
 4. [Lab 4: Monitoring LAMP Stack configured through CloudFormation](#lab-4-monitor-lamp-stack-configured-through-cloudformation)
 5. [Lab 5: AWS ECS Container Monitoring](#lab-5-aws-ecs-container-monitoring)
 6. [Lab 6: AWS CodeDeploy - Blue / Green Deployment](#lab-6-aws-codedeploy---blue--green-deployment)
 7. [Lab 7: AWS Lambda Zombie Workshop with Manual RUM Injection](#lab-7-aws-lambda-zombie-workshop)
+8. [Lab 8: Monitoring AWS Lambda Functions](#lab-8-monitoring-aws-lambda-functions)
 
 ## Pre-Requisits
 1. You need an AWS account. If you dont have one [get one here](https://aws.amazon.com/)
@@ -77,6 +79,30 @@ If something doesnt go as expected what to do? Well - Amazon provides a good way
 **Useful Links**
 * [Running commands on your Linux Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 * [Running commands on your Windows Instance during Startup](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html#user-data-execution)
+
+# Lab 2a Launch an Ec2 Instance DynatraceOneAgent and docker application
+In this step we will Launch an EC2 instance with an inbuilt Docker application, install Dynatrace OneAgent and access the Dynatrace Web UI to view our instance being monitored. 
+
+**Step by Step Guide**
+1. Log into to AWS console
+2. Select EC2 and Click on Launch an Instance. Make sure you are launching the EC2 instance in Oregon region (Top right menu)
+3. Click on Community AMI's. In the Search box type dynatrace. Select the image **Dynatrace_Easytravel_Docker_EC2**
+
+![](./images/lab2a_ec2imageselection.PNG)
+
+4. Select **t2.medium** instance type and Click on **Configure Instance Details**
+5. Expand the Advanced Details and specify the following User Data script (Grab the unique URL for Dynatrace OneAgent install from your Dynatrace UI)
+
+```
+#!/bin/sh
+wget <Your DynatraceOneAgent DOWNLOAD URL>
+/bin/sh <DynatraceOne Agent installer script> 
+chown ec2-user:ec2-user /home/ec2-user/easyTravel-Docker/docker-compose.yml
+/usr/local/bin/docker-compose -f /home/ec2-user/easyTravel-Docker/docker-compose.yml up -d
+```
+6. Click Next, explore the options and Launch the EC2 instance. (You will have to generate or use an already existing Key to remote into the EC2 instance)
+7. Now we will look into the Dynatrace UI to see monitoring data
+
 
 # Lab 3 Monitor-NodeJS-Beanstalk-Application
 This lab will teach us how to install a Dynatrace OneAgent into a Node.js application deployed with AWS Beanstalk.
@@ -249,3 +275,86 @@ Follow these steps to get this accomplished
 5. Upload the modified index.html file
 From now on, every time you access the Zombie Web Application the Dynatrace JavaScript Agent will be loaded. This means that you have automatic real end user monitoring!
 ![](./images/lab5_endusermonitoring.png)
+    
+# Lab 8 Monitoring AWS Lambda Functions
+This is a step by step workshop by Amazon on Deploying a Lambda Function and monitoring it with Dynatrace
+
+First we will create a Lambda Function. Select Lambda from AWS Services and Click on Create Function
+Provide the Name of the Lambda function - sampleLambdaFunction
+Runtime selected is Node.js 6.10
+Choose already existing role: service-role/admin
+![](./images/lab8_createLambdaFunction.PNG)
+
+Explore the Lambda console. In the Editor section copy the following code:
+
+```js
+/**
+ * This is a very simply lambda function that simply executes random HTTP Requests to a randomly selected group of URLs
+ * With the Dynatrace OneAgent injected you can end-to-end trace these calls
+ * 
+ */ 
+exports.handler = (event, context, callback) => {
+    // TODO implement
+    executeRequest("http://www.dynatrace.com");
+    executeRequest("http://www.amazon.com");
+    executeRequest("http://www.google.com");
+};
+
+var executeRequest = function(url, callback) {
+    var https = require("https");
+    var fullUrl = require("url").parse(url);
+
+    var request_options = {
+      host: fullUrl.host,
+      path: fullUrl.path,
+      method: 'GET',
+    };
+
+    // Set up the request
+    var get_req = https.request(request_options, function(res) {
+        var responseBody = "";
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            responseBody += chunk;
+        });
+        res.on('end', function() {
+            console.log(url + ": StatusCode = " + res.statusCode + " ContentLength: " + responseBody.length);
+            //callback(null, null);
+        });
+    });
+
+    // post the data
+    get_req.end();    
+    
+}
+```
+
+Click On Save. 
+
+You can test the Lambda Function from the Console. Click on Test. This will ask you to create a test event. Use the Hello World template to test (you will need to provide a name to the test event) 
+
+![](./images/lab8_lambdaExecutionSuccess.PNG)
+
+**Integrate Lambda Function with Dynatrace OneAgent**
+Follow the following steps:
+1. Create another function named dynatraceSampleLambda
+2. Go to the Dynatrace Console 
+3. Click on Deploy Dynatrace
+4. Select the Setup Serverless Integration option
+
+![](./images/lab8_serverlessIntegration.PNG) 
+
+5. For the sake of the workshop, we have already taken care of Step 1 (installing the Node Module)
+6. Select the option to add the code from an S3 bucket. Use the following URL for the S3 bucket
+```
+https://s3-us-west-2.amazonaws.com/dynatrace-api-data/sampleLambdaFunction.zip
+```
+![](./images/lab8_s3bucketURL.PNG)
+
+Copy the other settings from the Dynatrace UI to the Lambda Console
+
+![](./images/lab8_lambdaOptionsScreen.PNG)
+
+7. Now let us test the function and then take a look at the Dynatrace UI to see the Lambda Function data coming in
+
+![](./images/lab8_LambdaFunctionPurePath.PNG)
