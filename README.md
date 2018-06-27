@@ -277,15 +277,10 @@ From now on, every time you access the Zombie Web Application the Dynatrace Java
 ![](./images/lab5_endusermonitoring.png)
     
 # Lab 8 Monitoring AWS Lambda Functions
-This is a step by step workshop by Amazon on Deploying a Lambda Function and monitoring it with Dynatrace
 
-First we will create a Lambda Function. Select Lambda from AWS Services and Click on Create Function
-Provide the Name of the Lambda function - sampleLambdaFunction
-Runtime selected is Node.js 6.10
-Choose already existing role: service-role/admin
-![](./images/lab8_createLambdaFunction.PNG)
+If you want to monitor your AWS Lambda functions please follow the instructions for [How do I integrate Node.js Lambda functions](https://www.dynatrace.com/support/help/cloud-platforms/amazon-web-services/how-do-i-integrate-nodejs-lambda-functions/)
 
-Explore the Lambda console. In the Editor section copy the following code:
+In case you do not yet have a Lambda function that you can monitor feel free to setup a Lambda function with a respective API Gateway configuration based on the following very simply Lambda Node.js source code
 
 ```js
 /**
@@ -329,32 +324,9 @@ var executeRequest = function(url, callback) {
 }
 ```
 
-Click On Save. 
-
-You can test the Lambda Function from the Console. Click on Test. This will ask you to create a test event. Use the Hello World template to test (you will need to provide a name to the test event) 
-
-![](./images/lab8_lambdaExecutionSuccess.PNG)
-
-**Integrate Lambda Function with Dynatrace OneAgent**
-Follow the following steps:
-1. Create another function named dynatraceSampleLambda
-2. Go to the Dynatrace Console 
-3. Click on Deploy Dynatrace
-4. Select the Setup Serverless Integration option
-
-![](./images/lab8_serverlessIntegration.PNG) 
-
-5. For the sake of the workshop, we have already taken care of Step 1 (installing the Node Module)
-6. Select the option to add the code from an S3 bucket. Use the following URL for the S3 bucket
-```
-https://s3-us-west-2.amazonaws.com/dynatrace-api-data/sampleLambdaFunction.zip
-```
-![](./images/lab8_s3bucketURL.PNG)
-
-Copy the other settings from the Dynatrace UI to the Lambda Console
-
-![](./images/lab8_lambdaOptionsScreen.PNG)
-
-7. Now let us test the function and then take a look at the Dynatrace UI to see the Lambda Function data coming in
+To enable Dynatrace Lambda Monitoring follow instructions based on [How do I integrate Node.js Lambda functions](https://www.dynatrace.com/support/help/cloud-platforms/amazon-web-services/how-do-i-integrate-nodejs-lambda-functions/)
+If you have instrumented your Lambda and then execute it via the endpoint of your API Gateway you will see that Dynatrace captures PurePaths as shown below:
 
 ![](./images/lab8_LambdaFunctionPurePath.PNG)
+
+For more information on Lambda support (Node.js, Java, ...) please have a look at our website and blog where our team constantly announces new and updated technology support for [Lambda and other Serverless technologies](https://www.dynatrace.com/news/tag/serverless/).
