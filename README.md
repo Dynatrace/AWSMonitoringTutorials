@@ -243,7 +243,7 @@ Here are the steps involved
 2. Edit the User Data portion and add the OneAgent Installation steps. *ATTENTION:* The default AMI that is used for ECS EC2 Container Instances doesnt come with wget but it comes with curl. I also noticed I have to execute the install script with sudo in order for the installation script to run as root. Here is the code snippet that should work:
 ```
 #!/bin/bash
-curl -O Dynatrace-OneAgent-Linux.sh https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOADLINK
+curl "https://YOUR.FULL.DYNATRACE.ONEAGENT.DOWNLOADLINK" >> Dynatrace-OneAgent-Linux.sh
 sudo /bin/sh Dynatrace-OneAgent-Linux.sh APP_LOG_CONTENT_ACCESS=1 INFRA_ONLY=0
 ```
 3. Edit the Auto Scaling Group and configure it to use your new EC2 Launch Configuration
